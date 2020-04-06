@@ -21,3 +21,23 @@ describe('GET /health', () => {
     expect(typeof response.body.uptime).toBe('number');
   });
 });
+
+describe('GET redis_health', () => {
+  let response = null;
+  beforeAll(async done => {
+    response = await request(app).get('/redis_health');
+    return done();
+  });
+
+  it('status is 200', () => {
+    expect(response.status).toBe(200);
+  });
+
+  it('response has result property', () => {
+    expect(response.body).toHaveProperty('result');
+  });
+
+  it('result property has ok value', () => {
+    expect(response.body.result).toBe('ok');
+  });
+});

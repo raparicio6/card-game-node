@@ -59,7 +59,9 @@
     "express": "^4.16.2",
     "express-validator": "^6.4.0",
     "express-wolox-logger": "^2.0.0",
-    "helmet": "^3.22.0"
+    "helmet": "^3.22.0",
+    "ioredis": "^4.16.1",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "babel": "6.23.0",
