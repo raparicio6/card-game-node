@@ -3,7 +3,7 @@ const Monster = require('../models/monster');
 const Game = require('../models/game');
 const CardFactory = require('../models/cardFactory');
 const { getNewGameId, setGame, getGame } = require('../services/redis');
-const { formatGame } = require('../serializers/games');
+const { formatGame, formatCardsInHand, formatEntityStatus } = require('../serializers/games');
 
 const addCardsToHand = (owner, opponent) => {
   for (let i = 1; i <= owner.getNumberOfCardsInInitialHand(); i++) {
@@ -24,3 +24,9 @@ exports.createGame = (req, res) => {
 };
 
 exports.getGame = (req, res) => getGame(req.params.gameId).then(game => res.send({ game }));
+
+exports.getEntityCards = (req, res) =>
+  getGame(req.params.gameId).then(game => res.send(formatCardsInHand(game, req.query.entity)));
+
+exports.getEntityStatus = (req, res) =>
+  getGame(req.params.gameId).then(game => res.send(formatEntityStatus(game, req.query.entity)));

@@ -1,4 +1,4 @@
-const { formatGame } = require('../../app/serializers/games');
+const { formatGame, formatCardsInHand, formatEntityStatus } = require('../../app/serializers/games');
 const { game } = require('../testUtils/schemas/gamesSchemas');
 const Game = require('../../app/models/game');
 const Player = require('../../app/models/player');
@@ -22,5 +22,27 @@ describe('formatGame', () => {
 
   it('formattedGame matchs with game schema', () => {
     expect(formattedGame).toMatchObject({ game });
+  });
+});
+
+describe('formatCardsInHand', () => {
+  it('player formattedCards matchs with player cardsInHand in game', () => {
+    const formattedCards = formatCardsInHand(game, 'player');
+    expect(formattedCards).toMatchObject({ cards: game.player.cardsInHand });
+  });
+  it('monster formattedCards matchs with monster cardsInHand in game', () => {
+    const formattedCards = formatCardsInHand(game, 'monster');
+    expect(formattedCards).toMatchObject({ cards: game.monster.cardsInHand });
+  });
+});
+
+describe('formatEntityStatus', () => {
+  it('player formattedStatus matchs with player status in game', () => {
+    const formattedStatus = formatEntityStatus(game, 'player');
+    expect(formattedStatus).toMatchObject({ hp: game.player.hp, shield: game.player.shield });
+  });
+  it('monster formattedStatus matchs with monster status in game', () => {
+    const formattedStatus = formatEntityStatus(game, 'monster');
+    expect(formattedStatus).toMatchObject({ hp: game.monster.hp, shield: game.monster.shield });
   });
 });

@@ -94,3 +94,67 @@ describe('GET /games/:gameId', () => {
     });
   });
 });
+
+describe('GET /games/:gameId', () => {
+  describe('Successful response', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await setGame(game);
+      response = await request(app).get(`/games/${game.id}`);
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 200', () => {
+      expect(response.status).toBe(200);
+    });
+    it('response body matchs with game object', () => {
+      expect(response.body).toMatchObject({ game });
+    });
+  });
+});
+
+describe('GET /games/:gameId/cards', () => {
+  describe('Successful response', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await setGame(game);
+      response = await request(app)
+        .get(`/games/${game.id}/cards`)
+        .query({ entity: 'player' });
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 200', () => {
+      expect(response.status).toBe(200);
+    });
+    it('response body matchs with player cardsInHand in game', () => {
+      expect(response.body).toMatchObject({ cards: game.player.cardsInHand });
+    });
+  });
+});
+
+describe('GET /games/:gameId/status', () => {
+  describe('Successful response', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await setGame(game);
+      response = await request(app)
+        .get(`/games/${game.id}/status`)
+        .query({ entity: 'monster' });
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 200', () => {
+      expect(response.status).toBe(200);
+    });
+    it('response body matchs with monster status in game', () => {
+      expect(response.body).toMatchObject({ hp: game.monster.hp, shield: game.monster.shield });
+    });
+  });
+});
