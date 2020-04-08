@@ -20,7 +20,7 @@ describe('formatGame', () => {
     return done();
   });
 
-  it.only('formattedGame matchs with game schema', () => {
+  it('formattedGame matchs with game schema', () => {
     expect(formattedGame).toMatchObject({ game });
   });
 });

@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../app');
-const { redisClient } = require('../../app/services/redis');
+const { redisClient, setGame } = require('../../app/services/redis');
+const { game } = require('../testUtils/schemas/gamesSchemas');
 
 describe('POST /games', () => {
   describe('Successful response', () => {
@@ -70,6 +71,26 @@ describe('POST /games', () => {
     });
     it('monster cardsInHand has cards objects', () => {
       expect(response.body.game.monster.cardsInHand[0]).toHaveProperty('type');
+    });
+  });
+});
+
+describe('GET /games/:gameId', () => {
+  describe('Successful response', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await setGame(game);
+      response = await request(app).get(`/games/${game.id}`);
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 200', () => {
+      expect(response.status).toBe(200);
+    });
+    it('response body matchs with game object', () => {
+      expect(response.body).toMatchObject({ game });
     });
   });
 });

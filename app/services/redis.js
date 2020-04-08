@@ -29,4 +29,6 @@ const getNewGameId = () =>
 
 const setGame = game => redisClient.set(game.id, JSON.stringify(game), EXPIRE, GAME_EXPIRE_TIME);
 
-module.exports = { redisClient, getNewGameId, setGame };
+const getGame = gameId => redisClient.get(gameId).then(JSON.parse);
+
+module.exports = { redisClient, getNewGameId, setGame, getGame };
