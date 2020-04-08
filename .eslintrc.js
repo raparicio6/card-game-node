@@ -1,1 +1,9 @@
-module.exports = require('eslint-config-wolox-node');
+module.exports = {
+  extends: ['wolox-node'],
+  rules: {
+    'id-length': ['error', { max: 35 , min: 1 }],
+    'class-methods-use-this': 'off',
+    'no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }]
+  }
+};
+  
