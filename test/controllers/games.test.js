@@ -1,0 +1,75 @@
+const request = require('supertest');
+const app = require('../../app');
+const { redisClient } = require('../../app/services/redis');
+
+describe('POST /games', () => {
+  describe('Successful response', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      response = await request(app)
+        .post('/games')
+        .send({ game: { playerName: 'Fred' } });
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 201', () => {
+      expect(response.status).toBe(201);
+    });
+    it('response has game property', () => {
+      expect(response.body).toHaveProperty('game');
+    });
+    it('game has id property', () => {
+      expect(response.body.game).toHaveProperty('id');
+    });
+    it('id is number', () => {
+      expect(typeof response.body.game.id).toBe('number');
+    });
+    it('game has turns property', () => {
+      expect(response.body.game).toHaveProperty('turns');
+    });
+    it('turns is array', () => {
+      expect(Array.isArray(response.body.game.turns)).toBe(true);
+    });
+    it('game has player property', () => {
+      expect(response.body.game).toHaveProperty('player');
+    });
+    it('player has name property', () => {
+      expect(response.body.game.player).toHaveProperty('name');
+    });
+    it('player has hp property', () => {
+      expect(response.body.game.player).toHaveProperty('hp');
+    });
+    it('player has shield property', () => {
+      expect(response.body.game.player).toHaveProperty('shield');
+    });
+    it('player has cardsInHand property', () => {
+      expect(response.body.game.player).toHaveProperty('cardsInHand');
+    });
+    it('player cardsInHand is array', () => {
+      expect(Array.isArray(response.body.game.player.cardsInHand)).toBe(true);
+    });
+    it('player cardsInHand has cards objects', () => {
+      expect(response.body.game.player.cardsInHand[0]).toHaveProperty('type');
+    });
+    it('game has monster property', () => {
+      expect(response.body.game).toHaveProperty('monster');
+    });
+    it('monster has hp property', () => {
+      expect(response.body.game.monster).toHaveProperty('hp');
+    });
+    it('monster has shield property', () => {
+      expect(response.body.game.monster).toHaveProperty('shield');
+    });
+    it('monster has cardsInHand property', () => {
+      expect(response.body.game.monster).toHaveProperty('cardsInHand');
+    });
+    it('monster cardsInHand is array', () => {
+      expect(Array.isArray(response.body.game.monster.cardsInHand)).toBe(true);
+    });
+    it('monster cardsInHand has cards objects', () => {
+      expect(response.body.game.monster.cardsInHand[0]).toHaveProperty('type');
+    });
+  });
+});
