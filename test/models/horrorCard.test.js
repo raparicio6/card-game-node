@@ -5,22 +5,18 @@ const Turn = require('../../app/models/turn');
 
 describe('HorrorCard', () => {
   let horrorCard = null;
-  let player = null;
   let monster = null;
   beforeEach(done => {
-    player = new Player('Fred');
     monster = new Monster();
-    horrorCard = new HorrorCard(monster, player);
+    horrorCard = new HorrorCard(monster);
     return done();
   });
 
   it('horrorCard owner is monster', () => {
     expect(horrorCard.owner).toBe(monster);
   });
-  it('horrorCard opponent is player', () => {
-    expect(horrorCard.opponent).toBe(player);
-  });
   it('horrorCard applyEffect set turn cardCanBePlayed to false', () => {
+    const player = new Player('Fred');
     const opponentNextTurn = new Turn(player);
     expect(opponentNextTurn.cardCanBePlayed).toBe(true);
     horrorCard.applyEffect(opponentNextTurn);

@@ -1,15 +1,18 @@
 const Card = require('./card');
-
-const TYPE_NAME = 'horror';
+const { HORROR_CARD_TYPE_NAME } = require('../constants');
 
 module.exports = class HorrorCard extends Card {
   applyEffect(opponentNextTurn) {
     opponentNextTurn.cardCanBePlayed = false;
   }
 
+  getType() {
+    return HORROR_CARD_TYPE_NAME;
+  }
+
   toJSON() {
     return {
-      type: TYPE_NAME
+      type: this.getType()
     };
   }
 };

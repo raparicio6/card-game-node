@@ -4,17 +4,23 @@ const Game = require('../../app/models/game');
 const Player = require('../../app/models/player');
 const Monster = require('../../app/models/monster');
 const HealCard = require('../../app/models/healCard');
+const ShieldCard = require('../../app/models/shieldCard');
 const DamageCard = require('../../app/models/damageCard');
+const HorrorCard = require('../../app/models/horrorCard');
 
 describe('formatGame', () => {
   let formattedGame = null;
   beforeAll(done => {
     const player = new Player('Fred');
     const monster = new Monster();
-    const healCard = new HealCard(player, monster, 8);
+    const healCard = new HealCard(player, 8);
+    const shieldCard = new ShieldCard(player, 9);
     const damageCard = new DamageCard(monster, player, 10);
+    const horrorCard = new HorrorCard(monster);
     player.addCardToHand(healCard);
+    player.addCardToHand(shieldCard);
     monster.addCardToHand(damageCard);
+    monster.addCardToHand(horrorCard);
     const gameInstance = new Game(11131, player, monster);
     formattedGame = formatGame(gameInstance);
     return done();
@@ -28,11 +34,11 @@ describe('formatGame', () => {
 describe('formatCardsInHand', () => {
   it('player formattedCards matchs with player cardsInHand in game', () => {
     const formattedCards = formatCardsInHand(game, 'player');
-    expect(formattedCards).toMatchObject({ cards: game.player.cardsInHand });
+    expect(formattedCards).toMatchObject({ cardsInHand: game.player.cardsInHand });
   });
   it('monster formattedCards matchs with monster cardsInHand in game', () => {
     const formattedCards = formatCardsInHand(game, 'monster');
-    expect(formattedCards).toMatchObject({ cards: game.monster.cardsInHand });
+    expect(formattedCards).toMatchObject({ cardsInHand: game.monster.cardsInHand });
   });
 });
 

@@ -15,6 +15,10 @@ module.exports = class Entity {
     this.cardsInHand.push(card);
   }
 
+  removeCardFromHand(card) {
+    this.cardsInHand.splice(this.cardsInHand.indexOf(card), 1);
+  }
+
   gainHp(hp) {
     this.hp += hp;
     if (this.hp > this.getMaxHp()) {

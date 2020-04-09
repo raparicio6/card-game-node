@@ -8,7 +8,14 @@ exports.REDIS_HEALTH_EXPIRE_TIME = THREE_SECONDS;
 exports.LAST_GAME_ID_KEY = 'lastGameId';
 exports.GAME_EXPIRE_TIME = THREE_HOURS;
 
-exports.HEAL_CARD_TYPE = 1;
-exports.SHIELD_CARD_TYPE = 2;
-exports.DAMAGE_CARD_TYPE = 3;
-exports.HORROR_CARD_TYPE = 4;
+exports.HEAL_CARD_TYPE_NUMBER = 1;
+exports.SHIELD_CARD_TYPE_NUMBER = 2;
+exports.DAMAGE_CARD_TYPE_NUMBER = 3;
+exports.HORROR_CARD_TYPE_NUMBER = 4;
+
+exports.HEAL_CARD_TYPE_NAME = 'heal';
+exports.SHIELD_CARD_TYPE_NAME = 'shield';
+exports.DAMAGE_CARD_TYPE_NAME = 'damage';
+exports.HORROR_CARD_TYPE_NAME = 'horror';
+
+exports.PLAYER_MAX_POSSIBLE_CARD_VALUE = 12;

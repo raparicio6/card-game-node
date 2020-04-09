@@ -27,6 +27,12 @@ describe('DamageCard', () => {
     damageCard.applyEffect();
     expect(monster.shield).toBe(5);
   });
+  it('damageCard applyEffect with opponent with 0 shield reduces opponent hp from 10 to 5', () => {
+    monster.shield = 0;
+    expect(monster.hp).toBe(20);
+    damageCard.applyEffect();
+    expect(monster.hp).toBe(15);
+  });
   it('damageCard toJSON is { type: damage, value: 5 }', () => {
     expect(JSON.stringify(damageCard)).toStrictEqual(JSON.stringify({ type: 'damage', value: 5 }));
   });

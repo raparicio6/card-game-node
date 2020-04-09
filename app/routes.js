@@ -4,7 +4,7 @@ const { createGame, getGame, getEntityCards, getEntityStatus } = require('./cont
 exports.init = app => {
   app.get('/health', healthCheck);
   app.get('/redis_health', redisHealthCheck);
-  app.get('/games/:gameId/cards', getEntityCards);
+  app.get('/games/:gameId/cards_in_hand', getEntityCards);
   app.get('/games/:gameId/status', getEntityStatus);
   app.get('/games/:gameId', getGame);
   app.post('/games', createGame);

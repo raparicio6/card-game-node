@@ -21,6 +21,6 @@ exports.formatGame = gameInstance => {
   };
 };
 
-exports.formatCardsInHand = (game, entity) => ({ cards: game[entity].cardsInHand });
+exports.formatCardsInHand = (game, entity) => ({ cardsInHand: game[entity].cardsInHand });
 
 exports.formatEntityStatus = (game, entity) => ({ hp: game[entity].hp, shield: game[entity].shield });

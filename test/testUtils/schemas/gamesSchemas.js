@@ -9,6 +9,10 @@ exports.game = {
       {
         type: 'heal',
         value: 8
+      },
+      {
+        type: 'shield',
+        value: 9
       }
     ]
   },
@@ -19,6 +23,9 @@ exports.game = {
       {
         type: 'damage',
         value: 10
+      },
+      {
+        type: 'horror'
       }
     ]
   }

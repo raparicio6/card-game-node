@@ -1,10 +1,9 @@
 const Card = require('./card');
-
-const TYPE_NAME = 'heal';
+const { HEAL_CARD_TYPE_NAME } = require('../constants');
 
 module.exports = class HealCard extends Card {
-  constructor(owner, opponent, value) {
-    super(owner, opponent);
+  constructor(owner, value) {
+    super(owner);
     this.value = value;
   }
 
@@ -12,9 +11,13 @@ module.exports = class HealCard extends Card {
     this.owner.gainHp(this.value);
   }
 
+  getType() {
+    return HEAL_CARD_TYPE_NAME;
+  }
+
   toJSON() {
     return {
-      type: TYPE_NAME,
+      type: this.getType(),
       value: this.value
     };
   }
