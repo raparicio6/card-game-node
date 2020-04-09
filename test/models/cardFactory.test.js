@@ -15,14 +15,35 @@ describe('CardFactory', () => {
     return done();
   });
 
-  it('createCard for player', () => {
-    const card = CardFactory.createCard(player, monster);
-    expect([HealCard.name, DamageCard.name, ShieldCard.name]).toContain(card.constructor.name);
+  describe('createCard', () => {
+    it('createCard for player', () => {
+      const card = CardFactory.createCard(player, monster);
+      expect([HealCard.name, DamageCard.name, ShieldCard.name]).toContain(card.constructor.name);
+    });
+    it('createCard for monster', () => {
+      const card = CardFactory.createCard(monster, player);
+      expect([HealCard.name, DamageCard.name, ShieldCard.name, HorrorCard.name]).toContain(
+        card.constructor.name
+      );
+    });
   });
-  it('createCard for monster', () => {
-    const card = CardFactory.createCard(monster, player);
-    expect([HealCard.name, DamageCard.name, ShieldCard.name, HorrorCard.name]).toContain(
-      card.constructor.name
-    );
+
+  describe('getCardClassByCardTypeName', () => {
+    it('getCardClassByCardTypeName heal card', () => {
+      const cardClass = CardFactory.getCardClassByCardTypeName('heal');
+      expect(cardClass).toBe(HealCard);
+    });
+    it('getCardClassByCardTypeName shield card', () => {
+      const cardClass = CardFactory.getCardClassByCardTypeName('shield');
+      expect(cardClass).toBe(ShieldCard);
+    });
+    it('getCardClassByCardTypeName damage card', () => {
+      const cardClass = CardFactory.getCardClassByCardTypeName('damage');
+      expect(cardClass).toBe(DamageCard);
+    });
+    it('getCardClassByCardTypeName horror card', () => {
+      const cardClass = CardFactory.getCardClassByCardTypeName('horror');
+      expect(cardClass).toBe(HorrorCard);
+    });
   });
 });

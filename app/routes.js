@@ -1,5 +1,5 @@
 const { healthCheck, redisHealthCheck } = require('./controllers/healthCheck');
-const { createGame, getGame, getEntityCards, getEntityStatus } = require('./controllers/games');
+const { createGame, getGame, getEntityCards, getEntityStatus, playNextTurn } = require('./controllers/games');
 
 exports.init = app => {
   app.get('/health', healthCheck);
@@ -8,4 +8,5 @@ exports.init = app => {
   app.get('/games/:gameId/status', getEntityStatus);
   app.get('/games/:gameId', getGame);
   app.post('/games', createGame);
+  app.post('/turns', playNextTurn);
 };

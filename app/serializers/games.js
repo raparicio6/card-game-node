@@ -1,4 +1,4 @@
-exports.formatGame = gameInstance => {
+exports.serializeGame = gameInstance => {
   const playerCardsInHand = gameInstance.player.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
   const monsterCardsInHand = gameInstance.monster.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
 
@@ -21,6 +21,6 @@ exports.formatGame = gameInstance => {
   };
 };
 
-exports.formatCardsInHand = (game, entity) => ({ cardsInHand: game[entity].cardsInHand });
+exports.serializeCardsInHand = (game, entity) => ({ cardsInHand: game[entity].cardsInHand });
 
-exports.formatEntityStatus = (game, entity) => ({ hp: game[entity].hp, shield: game[entity].shield });
+exports.serializeEntityStatus = (game, entity) => ({ hp: game[entity].hp, shield: game[entity].shield });
