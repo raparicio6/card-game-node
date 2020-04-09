@@ -1,4 +1,4 @@
-const { formatGame, formatCardsInHand, formatEntityStatus } = require('../../app/serializers/games');
+const { serializeGame, serializeCardsInHand, serializeEntityStatus } = require('../../app/serializers/games');
 const { game } = require('../testUtils/schemas/gamesSchemas');
 const Game = require('../../app/models/game');
 const Player = require('../../app/models/player');
@@ -8,47 +8,47 @@ const ShieldCard = require('../../app/models/shieldCard');
 const DamageCard = require('../../app/models/damageCard');
 const HorrorCard = require('../../app/models/horrorCard');
 
-describe('formatGame', () => {
-  let formattedGame = null;
+describe('serializeGame', () => {
+  let serializedGame = null;
   beforeAll(done => {
     const player = new Player('Fred');
     const monster = new Monster();
     const healCard = new HealCard(player, 8);
     const shieldCard = new ShieldCard(player, 9);
-    const damageCard = new DamageCard(monster, player, 10);
+    const damageCard = new DamageCard(monster, 10, player);
     const horrorCard = new HorrorCard(monster);
     player.addCardToHand(healCard);
     player.addCardToHand(shieldCard);
     monster.addCardToHand(damageCard);
     monster.addCardToHand(horrorCard);
     const gameInstance = new Game(11131, player, monster);
-    formattedGame = formatGame(gameInstance);
+    serializedGame = serializeGame(gameInstance);
     return done();
   });
 
-  it('formattedGame matchs with game schema', () => {
-    expect(formattedGame).toMatchObject({ game });
+  it('serializedGame matchs with game schema', () => {
+    expect(serializedGame).toMatchObject({ game });
   });
 });
 
-describe('formatCardsInHand', () => {
-  it('player formattedCards matchs with player cardsInHand in game', () => {
-    const formattedCards = formatCardsInHand(game, 'player');
-    expect(formattedCards).toMatchObject({ cardsInHand: game.player.cardsInHand });
+describe('serializeCardsInHand', () => {
+  it('player serializedCardsInHand matchs with player cardsInHand in game', () => {
+    const serializedCardsInHand = serializeCardsInHand(game, 'player');
+    expect(serializedCardsInHand).toMatchObject({ cardsInHand: game.player.cardsInHand });
   });
-  it('monster formattedCards matchs with monster cardsInHand in game', () => {
-    const formattedCards = formatCardsInHand(game, 'monster');
-    expect(formattedCards).toMatchObject({ cardsInHand: game.monster.cardsInHand });
+  it('monster serializedCardsInHand matchs with monster cardsInHand in game', () => {
+    const serializedCardsInHand = serializeCardsInHand(game, 'monster');
+    expect(serializedCardsInHand).toMatchObject({ cardsInHand: game.monster.cardsInHand });
   });
 });
 
-describe('formatEntityStatus', () => {
-  it('player formattedStatus matchs with player status in game', () => {
-    const formattedStatus = formatEntityStatus(game, 'player');
-    expect(formattedStatus).toMatchObject({ hp: game.player.hp, shield: game.player.shield });
+describe('serializeEntityStatus', () => {
+  it('player serializedStatus matchs with player status in game', () => {
+    const serializedStatus = serializeEntityStatus(game, 'player');
+    expect(serializedStatus).toMatchObject({ hp: game.player.hp, shield: game.player.shield });
   });
-  it('monster formattedStatus matchs with monster status in game', () => {
-    const formattedStatus = formatEntityStatus(game, 'monster');
-    expect(formattedStatus).toMatchObject({ hp: game.monster.hp, shield: game.monster.shield });
+  it('monster serializedStatus matchs with monster status in game', () => {
+    const serializedStatus = serializeEntityStatus(game, 'monster');
+    expect(serializedStatus).toMatchObject({ hp: game.monster.hp, shield: game.monster.shield });
   });
 });

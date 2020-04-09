@@ -28,22 +28,34 @@ describe('CardFactory', () => {
     });
   });
 
-  describe('getCardClassByCardTypeName', () => {
-    it('getCardClassByCardTypeName heal card', () => {
-      const cardClass = CardFactory.getCardClassByCardTypeName('heal');
-      expect(cardClass).toBe(HealCard);
+  describe('getCardByTypeName', () => {
+    it('getCardByTypeName heal card', () => {
+      const healCard = CardFactory.getCardByTypeName('heal', player, 5);
+      const expectedCard = new HealCard(player, 5);
+      expect(healCard.constructor.name).toBe(expectedCard.constructor.name);
+      expect(healCard.owner).toBe(expectedCard.owner);
+      expect(healCard.value).toBe(expectedCard.value);
     });
-    it('getCardClassByCardTypeName shield card', () => {
-      const cardClass = CardFactory.getCardClassByCardTypeName('shield');
-      expect(cardClass).toBe(ShieldCard);
+    it('getCardByTypeName shield card', () => {
+      const shieldCard = CardFactory.getCardByTypeName('shield', player, 5);
+      const expectedCard = new ShieldCard(player, 5);
+      expect(shieldCard.constructor.name).toBe(expectedCard.constructor.name);
+      expect(shieldCard.owner).toBe(expectedCard.owner);
+      expect(shieldCard.value).toBe(expectedCard.value);
     });
-    it('getCardClassByCardTypeName damage card', () => {
-      const cardClass = CardFactory.getCardClassByCardTypeName('damage');
-      expect(cardClass).toBe(DamageCard);
+    it('getCardByTypeName damage card', () => {
+      const damageCard = CardFactory.getCardByTypeName('damage', player, 5, monster);
+      const expectedCard = new DamageCard(player, 5, monster);
+      expect(damageCard.constructor.name).toBe(expectedCard.constructor.name);
+      expect(damageCard.owner).toBe(expectedCard.owner);
+      expect(damageCard.value).toBe(expectedCard.value);
+      expect(damageCard.opponent).toBe(expectedCard.opponent);
     });
-    it('getCardClassByCardTypeName horror card', () => {
-      const cardClass = CardFactory.getCardClassByCardTypeName('horror');
-      expect(cardClass).toBe(HorrorCard);
+    it('getCardByTypeName horror card', () => {
+      const horrorCard = CardFactory.getCardByTypeName('horror', monster);
+      const expectedCard = new HorrorCard(monster);
+      expect(horrorCard.constructor.name).toBe(expectedCard.constructor.name);
+      expect(horrorCard.owner).toBe(expectedCard.owner);
     });
   });
 });

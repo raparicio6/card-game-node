@@ -140,8 +140,8 @@ describe('Monster', () => {
       healCard = new HealCard(monster, 7);
       shieldCard = new ShieldCard(monster, 5);
       horrorCard = new HorrorCard(monster);
-      bestDamageCard = new DamageCard(monster, player, 5);
-      otherDamageCard = new DamageCard(monster, player, 1);
+      bestDamageCard = new DamageCard(monster, 5, player);
+      otherDamageCard = new DamageCard(monster, 1, player);
       monster.addCardToHand(healCard);
       monster.addCardToHand(shieldCard);
       monster.addCardToHand(horrorCard);

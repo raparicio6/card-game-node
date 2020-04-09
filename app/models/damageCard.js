@@ -2,10 +2,10 @@ const Card = require('./card');
 const { DAMAGE_CARD_TYPE_NAME } = require('../constants');
 
 module.exports = class DamageCard extends Card {
-  constructor(owner, opponent, value) {
+  constructor(owner, value, opponent) {
     super(owner);
-    this.opponent = opponent;
     this.value = value;
+    this.opponent = opponent;
   }
 
   applyEffect(_) {

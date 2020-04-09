@@ -14,28 +14,28 @@ const {
   HORROR_CARD_TYPE_NAME
 } = require('../constants');
 
-const numbersWithCardsTypesMap = (owner, opponent, value) => ({
+const numbersWithCardsTypesMap = (owner, value, opponent) => ({
   [HEAL_CARD_TYPE_NUMBER]: new HealCard(owner, value),
   [SHIELD_CARD_TYPE_NUMBER]: new ShieldCard(owner, value),
-  [DAMAGE_CARD_TYPE_NUMBER]: new DamageCard(owner, opponent, value),
+  [DAMAGE_CARD_TYPE_NUMBER]: new DamageCard(owner, value, opponent),
   [HORROR_CARD_TYPE_NUMBER]: new HorrorCard(owner)
 });
 
-const namesWithCardsTypesMap = () => ({
-  [HEAL_CARD_TYPE_NAME]: HealCard,
-  [SHIELD_CARD_TYPE_NAME]: ShieldCard,
-  [DAMAGE_CARD_TYPE_NAME]: DamageCard,
-  [HORROR_CARD_TYPE_NAME]: HorrorCard
+const namesWithCardsTypesMap = (owner, value, opponent) => ({
+  [HEAL_CARD_TYPE_NAME]: new HealCard(owner, value),
+  [SHIELD_CARD_TYPE_NAME]: new ShieldCard(owner, value),
+  [DAMAGE_CARD_TYPE_NAME]: new DamageCard(owner, value, opponent),
+  [HORROR_CARD_TYPE_NAME]: new HorrorCard(owner)
 });
 
 module.exports = class CardFactory {
   static createCard(owner, opponent) {
     const cardValue = chooseNumberByProbabilities(owner.getCardsValuesWithProbabilities());
     const cardType = chooseNumberByProbabilities(owner.getCardTypesProbabilities());
-    return numbersWithCardsTypesMap(owner, opponent, cardValue)[cardType];
+    return numbersWithCardsTypesMap(owner, cardValue, opponent)[cardType];
   }
 
-  static getCardClassByCardTypeName(cardTypeName) {
-    return namesWithCardsTypesMap()[cardTypeName];
+  static getCardByTypeName(cardTypeName, owner, value, opponent) {
+    return namesWithCardsTypesMap(owner, value, opponent)[cardTypeName];
   }
 };

@@ -9,7 +9,7 @@ describe('DamageCard', () => {
   beforeEach(done => {
     player = new Player('Fred');
     monster = new Monster();
-    damageCard = new DamageCard(player, monster, 5);
+    damageCard = new DamageCard(player, 5, monster);
     return done();
   });
 
