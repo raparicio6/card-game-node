@@ -20,7 +20,7 @@ describe('GET /health', () => {
   });
 });
 
-describe('GET redis_health', () => {
+describe('GET /redis_health', () => {
   let response = null;
   beforeAll(async done => {
     response = await request(app).get('/redis_health');
@@ -33,7 +33,7 @@ describe('GET redis_health', () => {
   it('response has result property', () => {
     expect(response.body).toHaveProperty('result');
   });
-  it('result property has ok value', () => {
+  it('result property is ok', () => {
     expect(response.body.result).toBe('ok');
   });
 });
