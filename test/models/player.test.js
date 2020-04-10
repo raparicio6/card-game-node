@@ -65,6 +65,12 @@ describe('Player', () => {
     expect(player.cardsInHand.length).toBe(1);
     expect(player.cardsInHand[0].value).toBe(8);
   });
+  it('player removing a card not in hand nothing happens', () => {
+    const healCard = new HealCard();
+    expect(player.cardsInHand.length).toBe(0);
+    player.removeCardFromHand(healCard);
+    expect(player.cardsInHand.length).toBe(0);
+  });
   it('player with already max hp gains 0 hp using gainHp with 10', () => {
     expect(player.hp).toBe(20);
     player.gainHp(10);

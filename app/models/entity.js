@@ -1,6 +1,8 @@
 const CANNOT_INITIALIZE_MESSAGE = 'Cannot initialize Entity class';
 const SUBCLASS_MUST_IMPLEMENT_MESSAGE = 'Subclass must implement method';
 
+const findCard = (cardsInHand, card) => cardsInHand.find(c => c.type === card.type && card.value === c.value);
+
 module.exports = class Entity {
   constructor(hp, shield) {
     if (new.target === Entity) {
@@ -16,8 +18,10 @@ module.exports = class Entity {
   }
 
   removeCardFromHand(card) {
-    const cardFound = this.cardsInHand.find(c => c.type === card.type && card.value === c.value);
-    this.cardsInHand.splice(this.cardsInHand.indexOf(cardFound), 1);
+    const cardFound = findCard(this.cardsInHand, card);
+    if (cardFound) {
+      this.cardsInHand.splice(this.cardsInHand.indexOf(cardFound), 1);
+    }
   }
 
   gainHp(hp) {
@@ -40,6 +44,15 @@ module.exports = class Entity {
 
   wasKilled() {
     return this.hp <= 0;
+  }
+
+  wouldBeKilled(damage) {
+    return damage >= this.hp + this.shield;
+  }
+
+  hasCard(card) {
+    const cardFound = findCard(this.cardsInHand, card);
+    return !!cardFound;
   }
 
   // istanbul ignore next

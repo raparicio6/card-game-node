@@ -44,13 +44,4 @@ module.exports = class Player extends Entity {
   get cardsTypesProbabilities() {
     return CARD_TYPES_PROBABILITIES;
   }
-
-  wouldBeKilled(damage) {
-    return damage >= this.hp + this.shield;
-  }
-
-  hasCard(card) {
-    const cardFound = this.cardsInHand.find(c => c.type === card.type && card.value === c.value);
-    return !!cardFound;
-  }
 };
