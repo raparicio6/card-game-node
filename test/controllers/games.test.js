@@ -24,8 +24,8 @@ describe('POST /games', () => {
     it('game has id property', () => {
       expect(response.body.game).toHaveProperty('id');
     });
-    it('id is number', () => {
-      expect(typeof response.body.game.id).toBe('number');
+    it('id is string', () => {
+      expect(typeof response.body.game.id).toBe('string');
     });
     it('game has turns property', () => {
       expect(response.body.game).toHaveProperty('turns');
@@ -165,8 +165,8 @@ describe('PUT /turns', () => {
     it('game has id property', () => {
       expect(response.body.game).toHaveProperty('id');
     });
-    it('id is number', () => {
-      expect(typeof response.body.game.id).toBe('number');
+    it('id is string', () => {
+      expect(typeof response.body.game.id).toBe('string');
     });
     it('game has turns property', () => {
       expect(response.body.game).toHaveProperty('turns');

@@ -15,12 +15,12 @@ describe('Game', () => {
   beforeEach(done => {
     player = new Player('Fred');
     monster = new Monster();
-    game = new Game(1, player, monster);
+    game = new Game('abc123', player, monster);
     return done();
   });
 
-  it('game id is 1', () => {
-    expect(game.id).toBe(1);
+  it('game id is abc123', () => {
+    expect(game.id).toBe('abc123');
   });
   it('game player is player', () => {
     expect(game.player).toBe(player);

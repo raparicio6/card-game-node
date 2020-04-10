@@ -8,7 +8,7 @@ const ShieldCard = require('../../../app/models/shieldCard');
 const Turn = require('../../../app/models/turn');
 
 exports.game = {
-  id: 11131,
+  id: 'abc123',
   turns: [{ entityWhoPlays: 'Player', cardCanBePlayed: true, cardPlayed: null }],
   player: {
     name: 'Fred',
@@ -53,7 +53,7 @@ exports.getGameInstance = (monster = null, player = null) => {
   playerr.addCardToHand(shieldCard);
   monsterr.addCardToHand(damageCard);
   monsterr.addCardToHand(horrorCard);
-  const gameInstance = new Game(11131, playerr, monsterr);
+  const gameInstance = new Game('abc123', playerr, monsterr);
   const turn = new Turn(playerr);
   gameInstance.addTurn(turn);
   return gameInstance;

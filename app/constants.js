@@ -5,7 +5,7 @@ exports.EXPIRE = 'EX';
 exports.REDIS_HEALTH_KEY = 'health';
 exports.REDIS_HEALTH_DEFAULT_VALUE = 'ok';
 exports.REDIS_HEALTH_EXPIRE_TIME = THREE_SECONDS;
-exports.LAST_GAME_ID_KEY = 'lastGameId';
+exports.LAST_GAME_NUMBER_ID_KEY = 'lastGameNumberId';
 exports.GAME_EXPIRE_TIME = THREE_HOURS;
 
 exports.HEAL_CARD_TYPE_NUMBER = 1;

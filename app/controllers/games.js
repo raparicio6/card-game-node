@@ -1,20 +1,20 @@
+const { v4: uuidv4 } = require('uuid');
 const Player = require('../models/player');
 const Monster = require('../models/monster');
 const Game = require('../models/game');
 const CardFactory = require('../models/cardFactory');
-const { getNewGameId, storeGame, getGame } = require('../services/redis');
+const { storeGame, getGame } = require('../services/redis');
 const { serializeGame, serializeCardsInHand, serializeEntityStatus } = require('../serializers/games');
 const { mapGameToInstance } = require('../mappers/games');
 
 exports.createGame = (req, res) => {
   const player = new Player(req.body.game.playerName);
   const monster = new Monster();
-  return getNewGameId().then(gameId => {
-    const game = new Game(gameId, player, monster);
-    game.prepareFirstTurn();
-    const serializedGame = serializeGame(game);
-    return storeGame(serializedGame.game).then(() => res.status(201).send(serializedGame));
-  });
+  const gameId = uuidv4();
+  const game = new Game(gameId, player, monster);
+  game.prepareFirstTurn();
+  const serializedGame = serializeGame(game);
+  return storeGame(serializedGame.game).then(() => res.status(201).send(serializedGame));
 };
 
 exports.getGame = (req, res) => getGame(req.params.gameId).then(game => res.send({ game }));
