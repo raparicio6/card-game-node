@@ -16,14 +16,14 @@ module.exports = class Entity {
   }
 
   removeCardFromHand(card) {
-    const cardFound = this.cardsInHand.find(c => c.getType() === card.getType() && card.value === c.value);
+    const cardFound = this.cardsInHand.find(c => c.type === card.type && card.value === c.value);
     this.cardsInHand.splice(this.cardsInHand.indexOf(cardFound), 1);
   }
 
   gainHp(hp) {
     this.hp += hp;
-    if (this.hp > this.getMaxHp()) {
-      this.hp = this.getMaxHp();
+    if (this.hp > this.maxHp) {
+      this.hp = this.maxHp;
     }
   }
 
@@ -43,22 +43,22 @@ module.exports = class Entity {
   }
 
   // istanbul ignore next
-  getMaxHp() {
+  get maxHp() {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 
   // istanbul ignore next
-  getPossibleCardsWithProbabilities() {
+  get cardsValuesWithProbabilities() {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 
   // istanbul ignore next
-  getNumberOfCardsInInitialHand() {
+  get numberOfCardsInInitialHand() {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 
   // istanbul ignore next
-  getCardTypesProbabilities() {
+  get cardsTypesProbabilities() {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 };

@@ -11,13 +11,13 @@ module.exports = class HealCard extends Card {
     this.owner.gainHp(this.value);
   }
 
-  getType() {
+  get type() {
     return HEAL_CARD_TYPE_NAME;
   }
 
   toJSON() {
     return {
-      type: this.getType(),
+      type: this.type,
       value: this.value
     };
   }

@@ -5,7 +5,7 @@ const errors = require('../errors');
 const MAX_TURNS = 12;
 
 const addCardsToHand = (owner, opponent, entityDrawsCard) => {
-  for (let i = 1; i <= owner.getNumberOfCardsInInitialHand(); i++) {
+  for (let i = 1; i <= owner.numberOfCardsInInitialHand; i++) {
     entityDrawsCard(owner, opponent);
   }
 };
@@ -29,8 +29,8 @@ module.exports = class Game {
     this.turns.push(turn);
   }
 
-  getCurrentTurn() {
-    return this.turns[this.turns.length - 1];
+  get currentTurn() {
+    return this.turns.length ? this.turns[this.turns.length - 1] : null;
   }
 
   get winner() {
@@ -48,9 +48,8 @@ module.exports = class Game {
   }
 
   playPlayerTurn(cardPlayed) {
-    const currentTurn = this.getCurrentTurn();
     const monsterNextTurn = new Turn(this.monster);
-    if (!currentTurn.cardCanBePlayed) {
+    if (!this.currentTurn.cardCanBePlayed) {
       this.addTurn(monsterNextTurn);
       return;
     }
@@ -61,7 +60,7 @@ module.exports = class Game {
       }
 
       this.player.removeCardFromHand(cardPlayed);
-      currentTurn.cardPlayed = cardPlayed;
+      this.currentTurn.cardPlayed = cardPlayed;
       cardPlayed.applyEffect(monsterNextTurn);
     } else {
       throw errors.cardWasNotPlayedError();
@@ -73,15 +72,14 @@ module.exports = class Game {
   playMonsterTurn() {
     this.entityDrawsCard(this.monster, this.player);
 
-    const currentTurn = this.getCurrentTurn();
     const playerNextTurn = new Turn(this.player);
-    if (!currentTurn.cardCanBePlayed) {
+    if (!this.currentTurn.cardCanBePlayed) {
       this.addTurn(playerNextTurn);
       return null;
     }
 
     const cardPlayed = this.monster.playCard();
-    currentTurn.cardPlayed = cardPlayed;
+    this.currentTurn.cardPlayed = cardPlayed;
     cardPlayed.applyEffect(playerNextTurn);
 
     this.addTurn(playerNextTurn);

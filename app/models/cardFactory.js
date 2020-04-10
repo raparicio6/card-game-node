@@ -30,8 +30,8 @@ const namesWithCardsTypesMap = (owner, value, opponent) => ({
 
 module.exports = class CardFactory {
   static createCard(owner, opponent) {
-    const cardValue = chooseNumberByProbabilities(owner.getCardsValuesWithProbabilities());
-    const cardType = chooseNumberByProbabilities(owner.getCardTypesProbabilities());
+    const cardValue = chooseNumberByProbabilities(owner.cardsValuesWithProbabilities);
+    const cardType = chooseNumberByProbabilities(owner.cardsTypesProbabilities);
     return numbersWithCardsTypesMap(owner, cardValue, opponent)[cardType];
   }
 

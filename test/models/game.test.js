@@ -35,14 +35,18 @@ describe('Game', () => {
     game.addTurn(new Turn());
     expect(game.turns.length).toBe(1);
   });
-  it('getCurrentTurn returns last added turn', () => {
+  it('currentTurn returns null if there are no turns', () => {
+    expect(game.turns.length).toBe(0);
+    expect(game.currentTurn).toBe(null);
+  });
+  it('currentTurn returns last added turn', () => {
     const turn1 = new Turn();
     const turn2 = new Turn();
     const turn3 = new Turn();
     game.addTurn(turn1);
     game.addTurn(turn2);
     game.addTurn(turn3);
-    expect(game.getCurrentTurn()).toBe(turn3);
+    expect(game.currentTurn).toBe(turn3);
   });
 
   describe('winner', () => {

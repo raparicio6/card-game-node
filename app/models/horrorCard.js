@@ -6,13 +6,13 @@ module.exports = class HorrorCard extends Card {
     opponentNextTurn.cardCanBePlayed = false;
   }
 
-  getType() {
+  get type() {
     return HORROR_CARD_TYPE_NAME;
   }
 
   toJSON() {
     return {
-      type: this.getType()
+      type: this.type
     };
   }
 };

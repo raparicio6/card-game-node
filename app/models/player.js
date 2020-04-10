@@ -29,19 +29,19 @@ module.exports = class Player extends Entity {
     this.name = name;
   }
 
-  getMaxHp() {
+  get maxHp() {
     return MAX_HP;
   }
 
-  getCardsValuesWithProbabilities() {
+  get cardsValuesWithProbabilities() {
     return CARDS_VALUES_WITH_PROBABILITIES;
   }
 
-  getNumberOfCardsInInitialHand() {
+  get numberOfCardsInInitialHand() {
     return INITIAL_NUMBERS_OF_CARDS_IN_HAND;
   }
 
-  getCardTypesProbabilities() {
+  get cardsTypesProbabilities() {
     return CARD_TYPES_PROBABILITIES;
   }
 
@@ -50,7 +50,7 @@ module.exports = class Player extends Entity {
   }
 
   hasCard(card) {
-    const cardFound = this.cardsInHand.find(c => c.getType() === card.getType() && card.value === c.value);
+    const cardFound = this.cardsInHand.find(c => c.type === card.type && card.value === c.value);
     return !!cardFound;
   }
 };

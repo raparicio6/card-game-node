@@ -11,13 +11,13 @@ module.exports = class ShieldCard extends Card {
     this.owner.shield += this.value;
   }
 
-  getType() {
+  get type() {
     return SHIELD_CARD_TYPE_NAME;
   }
 
   toJSON() {
     return {
-      type: this.getType(),
+      type: this.type,
       value: this.value
     };
   }

@@ -21,11 +21,11 @@ describe('Monster', () => {
   it('monster has 0 cards in hand', () => {
     expect(monster.cardsInHand.length).toBe(0);
   });
-  it('monster getMaxHp is 20', () => {
-    expect(monster.getMaxHp()).toBe(20);
+  it('monster maxHp is 20', () => {
+    expect(monster.maxHp).toBe(20);
   });
-  it('monster getCardsValuesWithProbabilities is [[6, 0.3], [7, 0.25], [8, 0.2], [9, 0.15], [10, 0.1]]', () => {
-    expect(monster.getCardsValuesWithProbabilities()).toStrictEqual([
+  it('monster cardsValuesWithProbabilities is [[6, 0.3], [7, 0.25], [8, 0.2], [9, 0.15], [10, 0.1]]', () => {
+    expect(monster.cardsValuesWithProbabilities).toStrictEqual([
       [6, 0.3],
       [7, 0.25],
       [8, 0.2],
@@ -33,11 +33,11 @@ describe('Monster', () => {
       [10, 0.1]
     ]);
   });
-  it('monster getNumberOfCardsInInitialHand is 4', () => {
-    expect(monster.getNumberOfCardsInInitialHand()).toBe(4);
+  it('monster numberOfCardsInInitialHand is 4', () => {
+    expect(monster.numberOfCardsInInitialHand).toBe(4);
   });
-  it('monster getCardTypesProbabilities is [[1, 0.35], [2, 0.25], [3, 0.3], [4, 0.1]]', () => {
-    expect(monster.getCardTypesProbabilities()).toStrictEqual([
+  it('monster cardsTypesProbabilities is [[1, 0.35], [2, 0.25], [3, 0.3], [4, 0.1]]', () => {
+    expect(monster.cardsTypesProbabilities).toStrictEqual([
       [1, 0.35],
       [2, 0.25],
       [3, 0.3],

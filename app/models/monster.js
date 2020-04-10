@@ -34,33 +34,33 @@ module.exports = class Monster extends Entity {
     super(INITIAL_HP, INITIAL_SHIELD);
   }
 
-  getMaxHp() {
+  get maxHp() {
     return MAX_HP;
   }
 
-  getCardsValuesWithProbabilities() {
+  get cardsValuesWithProbabilities() {
     return CARDS_VALUES_WITH_PROBABILITIES;
   }
 
-  getNumberOfCardsInInitialHand() {
+  get numberOfCardsInInitialHand() {
     return INITIAL_NUMBERS_OF_CARDS_IN_HAND;
   }
 
-  getCardTypesProbabilities() {
+  get cardsTypesProbabilities() {
     return CARD_TYPES_PROBABILITIES;
   }
 
   playCard() {
     const nonHorrorSortedCards = this.cardsInHand
-      .filter(card => card.getType() !== HORROR_CARD_TYPE_NAME)
+      .filter(card => card.type !== HORROR_CARD_TYPE_NAME)
       .sort((card1, card2) => card2.value - card1.value);
-    const bestDamageCard = nonHorrorSortedCards.find(card => card.getType() === DAMAGE_CARD_TYPE_NAME);
+    const bestDamageCard = nonHorrorSortedCards.find(card => card.type === DAMAGE_CARD_TYPE_NAME);
     if (bestDamageCard && bestDamageCard.opponent.wouldBeKilled(bestDamageCard.value)) {
       this.removeCardFromHand(bestDamageCard);
       return bestDamageCard;
     }
 
-    const horrorCards = this.cardsInHand.filter(card => card.getType() === HORROR_CARD_TYPE_NAME);
+    const horrorCards = this.cardsInHand.filter(card => card.type === HORROR_CARD_TYPE_NAME);
     if (horrorCards.length) {
       this.removeCardFromHand(horrorCards[0]);
       return horrorCards[0];
@@ -68,7 +68,7 @@ module.exports = class Monster extends Entity {
 
     if (PLAYER_MAX_POSSIBLE_CARD_VALUE >= this.hp + this.shield) {
       const bestHealOrShieldCard = nonHorrorSortedCards.find(
-        card => card.getType() === SHIELD_CARD_TYPE_NAME || card.getType() === HEAL_CARD_TYPE_NAME
+        card => card.type === SHIELD_CARD_TYPE_NAME || card.type === HEAL_CARD_TYPE_NAME
       );
       if (bestHealOrShieldCard) {
         this.removeCardFromHand(bestHealOrShieldCard);

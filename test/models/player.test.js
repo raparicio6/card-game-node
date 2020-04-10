@@ -22,11 +22,11 @@ describe('Player', () => {
   it('player has 0 cards in hand', () => {
     expect(player.cardsInHand.length).toBe(0);
   });
-  it('player getMaxHp is 20', () => {
-    expect(player.getMaxHp()).toBe(20);
+  it('player maxHp is 20', () => {
+    expect(player.maxHp).toBe(20);
   });
-  it('player getCardsValuesWithProbabilities is [[8, 0.3], [9, 0.25], [10, 0.2], [11, 0.15], [12, 0.1]]', () => {
-    expect(player.getCardsValuesWithProbabilities()).toStrictEqual([
+  it('player cardsValuesWithProbabilities is [[8, 0.3], [9, 0.25], [10, 0.2], [11, 0.15], [12, 0.1]]', () => {
+    expect(player.cardsValuesWithProbabilities).toStrictEqual([
       [8, 0.3],
       [9, 0.25],
       [10, 0.2],
@@ -34,11 +34,11 @@ describe('Player', () => {
       [12, 0.1]
     ]);
   });
-  it('player getNumberOfCardsInInitialHand is 4', () => {
-    expect(player.getNumberOfCardsInInitialHand()).toBe(4);
+  it('player numberOfCardsInInitialHand is 4', () => {
+    expect(player.numberOfCardsInInitialHand).toBe(4);
   });
-  it('player getCardTypesProbabilities is [[1, 0.2], [2, 0.3], [3, 0.5]]', () => {
-    expect(player.getCardTypesProbabilities()).toStrictEqual([
+  it('player cardsTypesProbabilities is [[1, 0.2], [2, 0.3], [3, 0.5]]', () => {
+    expect(player.cardsTypesProbabilities).toStrictEqual([
       [1, 0.2],
       [2, 0.3],
       [3, 0.5]

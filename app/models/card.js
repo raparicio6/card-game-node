@@ -16,7 +16,7 @@ module.exports = class Card {
   }
 
   // istanbul ignore next
-  getType() {
+  get type() {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 

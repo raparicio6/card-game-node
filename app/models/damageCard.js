@@ -12,13 +12,13 @@ module.exports = class DamageCard extends Card {
     this.opponent.takeDamage(this.value);
   }
 
-  getType() {
+  get type() {
     return DAMAGE_CARD_TYPE_NAME;
   }
 
   toJSON() {
     return {
-      type: this.getType(),
+      type: this.type,
       value: this.value
     };
   }
