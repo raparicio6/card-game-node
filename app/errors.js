@@ -13,3 +13,9 @@ exports.cardPlayedIsNotInHandError = () =>
 exports.CARD_WAS_NOT_PLAYED_ERROR = 'card_was_not_played_error';
 exports.cardWasNotPlayedError = () =>
   internalError('Card was not played in a turn that a card can be played', exports.CARD_WAS_NOT_PLAYED_ERROR);
+
+exports.DATABASE_ERROR = 'database_error';
+exports.databaseError = message => internalError(message, exports.DATABASE_ERROR);
+
+exports.GAME_WAS_NOT_FOUND = 'game_was_not_found';
+exports.gameWasNotFound = () => internalError('Game was not found', exports.GAME_WAS_NOT_FOUND);

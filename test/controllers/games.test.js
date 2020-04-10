@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const request = require('supertest');
 const app = require('../../app');
 const { redisClient, storeGame } = require('../../app/services/redis');
@@ -76,6 +77,34 @@ describe('POST /games', () => {
       expect(response.body.game).toHaveProperty('winner');
     });
   });
+
+  describe('Redis error respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      await redisClient.quit();
+      response = await request(app)
+        .post('/games')
+        .send({ game: { playerName: 'Fred' } });
+      return done();
+    });
+    afterAll(async done => {
+      await redisClient.connect();
+      await redisClient.flushall();
+      return done;
+    });
+
+    it('status is 503', () => {
+      expect(response.status).toBe(503);
+    });
+    it('internalCode is database_error', () => {
+      expect(response.body.internalCode).toBe('database_error');
+    });
+    it('message is Connection is closed.', () => {
+      expect(response.body.message).toBe('Connection is closed.');
+    });
+  });
 });
 
 describe('GET /games/:gameId', () => {
@@ -94,6 +123,51 @@ describe('GET /games/:gameId', () => {
     });
     it('response body matchs with game object', () => {
       expect(response.body).toMatchObject({ game });
+    });
+  });
+
+  describe('Game not exists respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      response = await request(app).get('/games/abcbca');
+      return done();
+    });
+
+    it('status is 404', () => {
+      expect(response.status).toBe(404);
+    });
+    it('internalCode is game_was_not_found', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found');
+    });
+    it('message is Game was not found', () => {
+      expect(response.body.message).toBe('Game was not found');
+    });
+  });
+
+  describe('Redis error respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      await redisClient.quit();
+      response = await request(app).get(`/games/${game.id}`);
+      return done();
+    });
+    afterAll(async done => {
+      await redisClient.connect();
+      await redisClient.flushall();
+      return done;
+    });
+
+    it('status is 503', () => {
+      expect(response.status).toBe(503);
+    });
+    it('internalCode is database_error', () => {
+      expect(response.body.internalCode).toBe('database_error');
+    });
+    it('message is Connection is closed.', () => {
+      expect(response.body.message).toBe('Connection is closed.');
     });
   });
 });
@@ -118,6 +192,55 @@ describe('GET /games/:gameId/cards_in_hand', () => {
       expect(response.body).toMatchObject({ cardsInHand: game.player.cardsInHand });
     });
   });
+
+  describe('Game not exists respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      response = await request(app)
+        .get('/games/abcbca/cards_in_hand')
+        .query({ entity: 'player' });
+      return done();
+    });
+
+    it('status is 404', () => {
+      expect(response.status).toBe(404);
+    });
+    it('internalCode is game_was_not_found', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found');
+    });
+    it('message is Game was not found', () => {
+      expect(response.body.message).toBe('Game was not found');
+    });
+  });
+
+  describe('Redis error respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      await redisClient.quit();
+      response = await request(app)
+        .get(`/games/${game.id}/cards_in_hand`)
+        .query({ entity: 'player' });
+      return done();
+    });
+    afterAll(async done => {
+      await redisClient.connect();
+      await redisClient.flushall();
+      return done;
+    });
+
+    it('status is 503', () => {
+      expect(response.status).toBe(503);
+    });
+    it('internalCode is database_error', () => {
+      expect(response.body.internalCode).toBe('database_error');
+    });
+    it('message is Connection is closed.', () => {
+      expect(response.body.message).toBe('Connection is closed.');
+    });
+  });
 });
 
 describe('GET /games/:gameId/status', () => {
@@ -138,6 +261,55 @@ describe('GET /games/:gameId/status', () => {
     });
     it('response body matchs with monster status in game', () => {
       expect(response.body).toMatchObject({ hp: game.monster.hp, shield: game.monster.shield });
+    });
+  });
+
+  describe('Game not exists respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      response = await request(app)
+        .get('/games/abcbca/status')
+        .query({ entity: 'monster' });
+      return done();
+    });
+
+    it('status is 404', () => {
+      expect(response.status).toBe(404);
+    });
+    it('internalCode is game_was_not_found', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found');
+    });
+    it('message is Game was not found', () => {
+      expect(response.body.message).toBe('Game was not found');
+    });
+  });
+
+  describe('Redis error respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      await redisClient.quit();
+      response = await request(app)
+        .get(`/games/${game.id}/status`)
+        .query({ entity: 'monster' });
+      return done();
+    });
+    afterAll(async done => {
+      await redisClient.connect();
+      await redisClient.flushall();
+      return done;
+    });
+
+    it('status is 503', () => {
+      expect(response.status).toBe(503);
+    });
+    it('internalCode is database_error', () => {
+      expect(response.body.internalCode).toBe('database_error');
+    });
+    it('message is Connection is closed.', () => {
+      expect(response.body.message).toBe('Connection is closed.');
     });
   });
 });
@@ -214,6 +386,7 @@ describe('PUT /turns', () => {
       expect(response.body.game).toHaveProperty('winner');
     });
   });
+
   describe('Playing a card which is not in hand respond with error', () => {
     let response = null;
     beforeAll(async done => {
@@ -237,6 +410,7 @@ describe('PUT /turns', () => {
       expect(response.body.message).toBe('Card played is not in hand');
     });
   });
+
   describe('Not playing a card in a turn a card can be played respond with error', () => {
     let response = null;
     beforeAll(async done => {
@@ -257,6 +431,57 @@ describe('PUT /turns', () => {
     });
     it('message is Card was not played in a turn that a card can be played', () => {
       expect(response.body.message).toBe('Card was not played in a turn that a card can be played');
+    });
+  });
+
+  describe('Game not exists respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      const cardPlayed = game.player.cardsInHand[0];
+      response = await request(app)
+        .put('/turns')
+        .send({ gameId: 'abcbca', turn: { cardPlayed } });
+      return done();
+    });
+
+    it('status is 404', () => {
+      expect(response.status).toBe(404);
+    });
+    it('internalCode is game_was_not_found', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found');
+    });
+    it('message is Game was not found', () => {
+      expect(response.body.message).toBe('Game was not found');
+    });
+  });
+
+  describe('Redis error respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      await redisClient.quit();
+      const cardPlayed = game.player.cardsInHand[0];
+      response = await request(app)
+        .put('/turns')
+        .send({ gameId: game.id, turn: { cardPlayed } });
+      return done();
+    });
+    afterAll(async done => {
+      await redisClient.connect();
+      await redisClient.flushall();
+      return done;
+    });
+
+    it('status is 503', () => {
+      expect(response.status).toBe(503);
+    });
+    it('internalCode is database_error', () => {
+      expect(response.body.internalCode).toBe('database_error');
+    });
+    it('message is Connection is closed.', () => {
+      expect(response.body.message).toBe('Connection is closed.');
     });
   });
 });
