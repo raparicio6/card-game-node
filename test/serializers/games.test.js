@@ -1,33 +1,26 @@
 const { serializeGame, serializeCardsInHand, serializeEntityStatus } = require('../../app/serializers/games');
-const { game } = require('../testUtils/schemas/gamesSchemas');
-const Game = require('../../app/models/game');
+const { game, getGameInstance } = require('../testUtils/schemas/gamesSchemas');
 const Player = require('../../app/models/player');
 const Monster = require('../../app/models/monster');
-const HealCard = require('../../app/models/healCard');
-const ShieldCard = require('../../app/models/shieldCard');
 const DamageCard = require('../../app/models/damageCard');
-const HorrorCard = require('../../app/models/horrorCard');
 
 describe('serializeGame', () => {
-  let serializedGame = null;
-  beforeAll(done => {
+  it('serializedGame matchs with game schema', () => {
+    const serializedGame = serializeGame(getGameInstance());
+    expect(serializedGame).toMatchObject({ game });
+  });
+  it('serializedGame winner is winner entity name', () => {
+    const monster = new Monster();
+    monster.hp = 0;
+    const serializedGame = serializeGame(getGameInstance(monster));
+    expect(serializedGame.game.winner).toBe('Player');
+  });
+  it('serializedGame monsterEffect is card parameter', () => {
     const player = new Player('Fred');
     const monster = new Monster();
-    const healCard = new HealCard(player, 8);
-    const shieldCard = new ShieldCard(player, 9);
-    const damageCard = new DamageCard(monster, 10, player);
-    const horrorCard = new HorrorCard(monster);
-    player.addCardToHand(healCard);
-    player.addCardToHand(shieldCard);
-    monster.addCardToHand(damageCard);
-    monster.addCardToHand(horrorCard);
-    const gameInstance = new Game(11131, player, monster);
-    serializedGame = serializeGame(gameInstance);
-    return done();
-  });
-
-  it('serializedGame matchs with game schema', () => {
-    expect(serializedGame).toMatchObject({ game });
+    const card = new DamageCard(monster, 8, player);
+    const serializedGame = serializeGame(getGameInstance(monster, player), card);
+    expect(serializedGame.game.monsterEffect).toMatchObject(JSON.parse(JSON.stringify(card)));
   });
 });
 

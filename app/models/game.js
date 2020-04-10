@@ -1,3 +1,14 @@
+const CardFactory = require('./cardFactory');
+const Turn = require('./turn');
+
+const MAX_TURNS = 12;
+
+const addCardsToHand = (owner, opponent, entityDrawsCard) => {
+  for (let i = 1; i <= owner.getNumberOfCardsInInitialHand(); i++) {
+    entityDrawsCard(owner, opponent);
+  }
+};
+
 module.exports = class Game {
   constructor(id, player, monster) {
     this.id = id;
@@ -6,7 +17,74 @@ module.exports = class Game {
     this.turns = [];
   }
 
+  prepareFirstTurn() {
+    addCardsToHand(this.player, this.monster, this.entityDrawsCard);
+    addCardsToHand(this.monster, this.player, this.entityDrawsCard);
+    this.addTurn(new Turn(this.player));
+    this.entityDrawsCard(this.player, this.monster);
+  }
+
   addTurn(turn) {
     this.turns.push(turn);
+  }
+
+  getCurrentTurn() {
+    return this.turns[this.turns.length - 1];
+  }
+
+  get winner() {
+    if (this.monster.wasKilled()) {
+      return this.player;
+    }
+    if (this.player.wasKilled() || this.turns.length >= MAX_TURNS) {
+      return this.monster;
+    }
+    return null;
+  }
+
+  entityDrawsCard(owner, opponent) {
+    owner.addCardToHand(CardFactory.createCard(owner, opponent));
+  }
+
+  playPlayerTurn(cardPlayed) {
+    // chequear que pueda jugar el turno comparando con el turn de la db
+    // if (!player.hasCard(cardPlayed)){ // tira error si no tiene la carta
+    //   return error
+    // }
+    this.player.removeCardFromHand(cardPlayed);
+    const currentTurn = this.getCurrentTurn();
+    currentTurn.cardPlayed = cardPlayed;
+
+    const monsterNextTurn = new Turn(this.monster);
+    cardPlayed.applyEffect(monsterNextTurn);
+    this.addTurn(monsterNextTurn);
+  }
+
+  playMonsterTurn() {
+    this.entityDrawsCard(this.monster, this.player);
+
+    const cardPlayed = this.monster.playCard();
+    const currentTurn = this.getCurrentTurn();
+    currentTurn.cardPlayed = cardPlayed;
+
+    const playerNextTurn = new Turn(this.player);
+    cardPlayed.applyEffect(playerNextTurn);
+    this.addTurn(playerNextTurn);
+    return cardPlayed;
+  }
+
+  playNextPlayerAndMonsterTurns(playerCardPlayed) {
+    this.playPlayerTurn(playerCardPlayed);
+    if (this.winner) {
+      return null;
+    }
+
+    const monsterCardPlayed = this.playMonsterTurn();
+    if (this.winner) {
+      return monsterCardPlayed;
+    }
+
+    this.entityDrawsCard(this.player, this.monster);
+    return monsterCardPlayed;
   }
 };

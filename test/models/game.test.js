@@ -2,6 +2,10 @@ const Game = require('../../app/models/game');
 const Player = require('../../app/models/player');
 const Monster = require('../../app/models/monster');
 const Turn = require('../../app/models/turn');
+const HealCard = require('../../app/models/healCard');
+const HorrorCard = require('../../app/models/horrorCard');
+const ShieldCard = require('../../app/models/shieldCard');
+const DamageCard = require('../../app/models/damageCard');
 
 describe('Game', () => {
   let game = null;
@@ -29,5 +33,123 @@ describe('Game', () => {
   it('game has 1 turn after adding 1 turn', () => {
     game.addTurn(new Turn());
     expect(game.turns.length).toBe(1);
+  });
+  it('getCurrentTurn returns last added turn', () => {
+    const turn1 = new Turn();
+    const turn2 = new Turn();
+    const turn3 = new Turn();
+    game.addTurn(turn1);
+    game.addTurn(turn2);
+    game.addTurn(turn3);
+    expect(game.getCurrentTurn()).toBe(turn3);
+  });
+
+  describe('winner', () => {
+    it('monster has 0 hp so player wins', () => {
+      monster.hp = 0;
+      expect(game.winner).toBe(player);
+    });
+    it('player has 0 hp so monster wins', () => {
+      player.hp = 0;
+      expect(game.winner).toBe(monster);
+    });
+    it('there are 12 turns so monster wins', () => {
+      for (let i = 1; i <= 12; i++) {
+        game.addTurn(new Turn());
+      }
+      expect(game.winner).toBe(monster);
+    });
+  });
+
+  describe('playing turns', () => {
+    it('playPlayerTurn', () => {
+      const healCard = new HealCard(player, 5);
+      player.addCardToHand(healCard);
+      const playerTurn = new Turn(player);
+      game.addTurn(playerTurn);
+      expect(game.turns.length).toBe(1);
+      expect(player.cardsInHand.length).toBe(1);
+      expect(playerTurn.cardPlayed).toBe(null);
+      game.playPlayerTurn(healCard);
+      expect(playerTurn.cardPlayed).toBe(healCard);
+      expect(player.cardsInHand.length).toBe(0);
+      expect(game.turns.length).toBe(2);
+    });
+    it('playMonsterTurn', () => {
+      const monsterTurn = new Turn(monster);
+      game.addTurn(monsterTurn);
+      expect(game.turns.length).toBe(1);
+      expect(monster.cardsInHand.length).toBe(0);
+      expect(monsterTurn.cardPlayed).toBe(null);
+      const cardPlayed = game.playMonsterTurn();
+      expect(monsterTurn.cardPlayed).toBe(cardPlayed);
+      expect(monster.cardsInHand.length).toBe(0);
+      expect(game.turns.length).toBe(2);
+    });
+    it('playNextPlayerAndMonsterTurns no winner', () => {
+      const healCard = new HealCard(player, 5);
+      player.addCardToHand(healCard);
+      const playerTurn = new Turn(player);
+      game.addTurn(playerTurn);
+
+      expect(game.turns.length).toBe(1);
+      expect(player.cardsInHand.length).toBe(1);
+      expect(playerTurn.cardPlayed).toBe(null);
+      expect(monster.cardsInHand.length).toBe(0);
+
+      const monsterEffect = game.playNextPlayerAndMonsterTurns(healCard);
+
+      expect(playerTurn.cardPlayed).toBe(healCard);
+      expect(player.cardsInHand.length).toBe(1);
+      expect(game.turns.length).toBe(3);
+      expect([HealCard.name, DamageCard.name, ShieldCard.name, HorrorCard.name]).toContain(
+        monsterEffect.constructor.name
+      );
+      expect(monster.cardsInHand.length).toBe(0);
+    });
+    it('playNextPlayerAndMonsterTurns wins player', () => {
+      const damageCard = new DamageCard(player, 12, monster);
+      monster.hp = 10;
+      monster.shield = 0;
+      player.addCardToHand(damageCard);
+      const playerTurn = new Turn(player);
+      game.addTurn(playerTurn);
+
+      expect(game.turns.length).toBe(1);
+      expect(player.cardsInHand.length).toBe(1);
+      expect(playerTurn.cardPlayed).toBe(null);
+      expect(monster.cardsInHand.length).toBe(0);
+
+      const monsterEffect = game.playNextPlayerAndMonsterTurns(damageCard);
+
+      expect(playerTurn.cardPlayed).toBe(damageCard);
+      expect(player.cardsInHand.length).toBe(0);
+      expect(game.turns.length).toBe(2);
+      expect(monsterEffect).toBe(null);
+      expect(monster.cardsInHand.length).toBe(0);
+    });
+    it('playNextPlayerAndMonsterTurns wins monster', () => {
+      const damageCard = new DamageCard(monster, 11, player);
+      player.hp = 8;
+      player.shield = 0;
+      monster.addCardToHand(damageCard);
+      const playerDamageCard = new DamageCard(player, 5, monster);
+      player.addCardToHand(playerDamageCard);
+      const playerTurn = new Turn(player);
+      game.addTurn(playerTurn);
+
+      expect(game.turns.length).toBe(1);
+      expect(player.cardsInHand.length).toBe(1);
+      expect(playerTurn.cardPlayed).toBe(null);
+      expect(monster.cardsInHand.length).toBe(1);
+
+      const monsterEffect = game.playNextPlayerAndMonsterTurns(playerDamageCard);
+
+      expect(playerTurn.cardPlayed).toBe(playerDamageCard);
+      expect(player.cardsInHand.length).toBe(0);
+      expect(game.turns.length).toBe(3);
+      expect(monsterEffect).toBe(damageCard);
+      expect(monster.cardsInHand.length).toBe(1);
+    });
   });
 });

@@ -23,10 +23,10 @@ const CARDS_VALUES_WITH_PROBABILITIES = [
 ];
 const INITIAL_NUMBERS_OF_CARDS_IN_HAND = 4;
 const CARD_TYPES_PROBABILITIES = [
-  [HEAL_CARD_TYPE_NUMBER, 0.29],
-  [SHIELD_CARD_TYPE_NUMBER, 0.29],
-  [DAMAGE_CARD_TYPE_NUMBER, 0.29],
-  [HORROR_CARD_TYPE_NUMBER, 0.13]
+  [HEAL_CARD_TYPE_NUMBER, 0.35],
+  [SHIELD_CARD_TYPE_NUMBER, 0.25],
+  [DAMAGE_CARD_TYPE_NUMBER, 0.3],
+  [HORROR_CARD_TYPE_NUMBER, 0.1]
 ];
 
 module.exports = class Monster extends Entity {
@@ -76,7 +76,7 @@ module.exports = class Monster extends Entity {
       }
     }
 
-    this.removeCardFromHand(bestDamageCard);
-    return bestDamageCard;
+    this.removeCardFromHand(bestDamageCard || nonHorrorSortedCards[0]);
+    return bestDamageCard || nonHorrorSortedCards[0];
   }
 };

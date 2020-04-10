@@ -1,11 +1,12 @@
-exports.serializeGame = gameInstance => {
+exports.serializeGame = (gameInstance, monsterCardPlayed = null) => {
   const playerCardsInHand = gameInstance.player.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
   const monsterCardsInHand = gameInstance.monster.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
+  const turns = gameInstance.turns.map(turn => JSON.parse(JSON.stringify(turn)));
 
   return {
     game: {
       id: gameInstance.id,
-      turns: gameInstance.turns,
+      turns,
       player: {
         name: gameInstance.player.name,
         hp: gameInstance.player.hp,
@@ -16,7 +17,9 @@ exports.serializeGame = gameInstance => {
         hp: gameInstance.monster.hp,
         shield: gameInstance.monster.shield,
         cardsInHand: monsterCardsInHand
-      }
+      },
+      monsterEffect: monsterCardPlayed ? JSON.parse(JSON.stringify(monsterCardPlayed)) : null,
+      winner: gameInstance.winner ? gameInstance.winner.constructor.name : null
     }
   };
 };

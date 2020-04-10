@@ -36,12 +36,12 @@ describe('Monster', () => {
   it('monster getNumberOfCardsInInitialHand is 4', () => {
     expect(monster.getNumberOfCardsInInitialHand()).toBe(4);
   });
-  it('monster getCardTypesProbabilities is [[1, 0.29], [2, 0.29], [3, 0.29], [4, 0.13]]', () => {
+  it('monster getCardTypesProbabilities is [[1, 0.35], [2, 0.25], [3, 0.3], [4, 0.1]]', () => {
     expect(monster.getCardTypesProbabilities()).toStrictEqual([
-      [1, 0.29],
-      [2, 0.29],
-      [3, 0.29],
-      [4, 0.13]
+      [1, 0.35],
+      [2, 0.25],
+      [3, 0.3],
+      [4, 0.1]
     ]);
   });
 
@@ -67,6 +67,15 @@ describe('Monster', () => {
       expect(monster.cardsInHand.length).toBe(1);
       expect(monster.cardsInHand[0].value).toBe(8);
     });
+    it('monster with 2 cards including horror card has 1 card in hand after removing 1 horror card', () => {
+      const healCard = new HealCard(monster, 5);
+      const horrorCard = new HorrorCard(monster);
+      monster.addCardToHand(healCard);
+      monster.addCardToHand(horrorCard);
+      expect(monster.cardsInHand.length).toBe(2);
+      monster.removeCardFromHand(horrorCard);
+      expect(monster.cardsInHand.length).toBe(1);
+    });
   });
 
   describe('gainHp', () => {
@@ -82,26 +91,18 @@ describe('Monster', () => {
     });
   });
 
-  describe('takeDamage', () => {
-    it('monster with 0 shield loses 10 hp using takeDamage with 10', () => {
-      monster.shield = 0;
-      expect(monster.hp).toBe(20);
-      monster.takeDamage(10);
-      expect(monster.hp).toBe(10);
+  describe('wasKilled', () => {
+    it('monster with 0 hp was killed', () => {
+      monster.hp = 0;
+      expect(monster.wasKilled()).toBe(true);
     });
-    it('monster with 10 shield loses 0 hp and 10 shield using takeDamage with 10', () => {
-      expect(monster.shield).toBe(10);
-      expect(monster.hp).toBe(20);
-      monster.takeDamage(10);
-      expect(monster.hp).toBe(20);
-      expect(monster.shield).toBe(0);
+    it('monster with 1 hp was not killed', () => {
+      monster.hp = 1;
+      expect(monster.wasKilled()).toBe(false);
     });
-    it('monster with 5 shield loses 5 hp and 5 shield using takeDamage with 10', () => {
-      monster.shield = 5;
-      expect(monster.hp).toBe(20);
-      monster.takeDamage(10);
-      expect(monster.hp).toBe(15);
-      expect(monster.shield).toBe(0);
+    it('monster with -5 hp was killed', () => {
+      monster.hp = -5;
+      expect(monster.wasKilled()).toBe(true);
     });
   });
 
@@ -218,6 +219,14 @@ describe('Monster', () => {
       monster.hp = 11;
       monster.shield = 0;
       expect(monster.playCard()).toBe(bestDamageCard);
+    });
+    it('opponent has more hp than best damage card with no horror or damage cards and hp is more than 12 and shield is 0 returns best shield or heal', () => {
+      monster.removeCardFromHand(horrorCard);
+      monster.removeCardFromHand(bestDamageCard);
+      monster.removeCardFromHand(otherDamageCard);
+      monster.hp = 15;
+      monster.shield = 0;
+      expect(monster.playCard()).toBe(healCard);
     });
   });
 });

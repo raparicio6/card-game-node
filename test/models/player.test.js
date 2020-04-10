@@ -1,5 +1,7 @@
 const Player = require('../../app/models/player');
 const HealCard = require('../../app/models/healCard');
+const ShieldCard = require('../../app/models/shieldCard');
+const DamageCard = require('../../app/models/damageCard');
 
 describe('Player', () => {
   let player = null;
@@ -35,11 +37,11 @@ describe('Player', () => {
   it('player getNumberOfCardsInInitialHand is 4', () => {
     expect(player.getNumberOfCardsInInitialHand()).toBe(4);
   });
-  it('player getCardTypesProbabilities is [[1, 0.33], [2, 0.33], [3, 0.34]]', () => {
+  it('player getCardTypesProbabilities is [[1, 0.2], [2, 0.3], [3, 0.5]]', () => {
     expect(player.getCardTypesProbabilities()).toStrictEqual([
-      [1, 0.33],
-      [2, 0.33],
-      [3, 0.34]
+      [1, 0.2],
+      [2, 0.3],
+      [3, 0.5]
     ]);
   });
   it('player has 1 card in hand after adding 1 card', () => {
@@ -107,5 +109,49 @@ describe('Player', () => {
     player.hp = 4;
     player.shield = 2;
     expect(player.wouldBeKilled(5)).toBe(false);
+  });
+  it('wouldBeKilled is false with player with 4 hp and 2 shield and 5 of damage', () => {
+    player.hp = 4;
+    player.shield = 2;
+    expect(player.wouldBeKilled(5)).toBe(false);
+  });
+
+  describe('hasCard', () => {
+    it('has searched card returns true', () => {
+      const healCard = new HealCard(player, 5);
+      const healCard2 = new HealCard(player, 8);
+      const shieldCard = new ShieldCard(player, 5);
+      const damageCard = new DamageCard(player, 5);
+      player.addCardToHand(healCard);
+      player.addCardToHand(healCard2);
+      player.addCardToHand(shieldCard);
+      player.addCardToHand(damageCard);
+      expect(player.hasCard(healCard2)).toBe(true);
+    });
+    it('does not have searched card returns false', () => {
+      const healCard = new HealCard(player, 5);
+      const healCard2 = new HealCard(player, 8);
+      const shieldCard = new ShieldCard(player, 5);
+      const damageCard = new DamageCard(player, 5);
+      player.addCardToHand(healCard);
+      player.addCardToHand(shieldCard);
+      player.addCardToHand(damageCard);
+      expect(player.hasCard(healCard2)).toBe(false);
+    });
+  });
+
+  describe('wasKilled', () => {
+    it('player with 0 hp was killed', () => {
+      player.hp = 0;
+      expect(player.wasKilled()).toBe(true);
+    });
+    it('player with 1 hp was not killed', () => {
+      player.hp = 1;
+      expect(player.wasKilled()).toBe(false);
+    });
+    it('player with -5 hp was killed', () => {
+      player.hp = -5;
+      expect(player.wasKilled()).toBe(true);
+    });
   });
 });

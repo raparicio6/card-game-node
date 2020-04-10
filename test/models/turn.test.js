@@ -5,12 +5,9 @@ const HealCard = require('../../app/models/healCard');
 describe('Turn', () => {
   let turn = null;
   let player = null;
-  let healCard = null;
   beforeEach(done => {
     player = new Player('Fred');
     turn = new Turn(player);
-    healCard = new HealCard(player, 5);
-    player.addCardToHand(healCard);
     return done();
   });
 
@@ -31,6 +28,8 @@ describe('Turn', () => {
     });
   });
   it('turn toJSON with cardPlayed returns expected json', () => {
+    const healCard = new HealCard(player, 5);
+    player.addCardToHand(healCard);
     turn.cardPlayed = healCard;
     expect(JSON.parse(JSON.stringify(turn))).toMatchObject({
       entityWhoPlays: 'Player',

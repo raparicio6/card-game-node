@@ -1,4 +1,4 @@
-const { redisClient, setGame, getNewGameId, getGame } = require('../../app/services/redis');
+const { redisClient, storeGame, getNewGameId, getGame } = require('../../app/services/redis');
 const { game } = require('../testUtils/schemas/gamesSchemas');
 
 describe('Redis service', () => {
@@ -12,8 +12,8 @@ describe('Redis service', () => {
     await redisClient.set('lastGameId', 5);
     expect(await getNewGameId()).toBe(6);
   });
-  it('setGame stored game properly', async () => {
-    await setGame(game);
+  it('storeGame stores game properly', async () => {
+    await storeGame(game);
     const storedGame = await redisClient.get(game.id);
     expect(JSON.parse(storedGame)).toMatchObject(game);
   });

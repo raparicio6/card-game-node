@@ -11,12 +11,12 @@ const redisClient = new Redis({
   db: 0
 });
 
-const setLastGameId = id => redisClient.set(LAST_GAME_ID_KEY, id);
+const storeLastGameId = id => redisClient.set(LAST_GAME_ID_KEY, id);
 
 const getLastGameId = () =>
   redisClient.get(LAST_GAME_ID_KEY).then(async result => {
     if (!result) {
-      await setLastGameId(INITIAL_GAME_ID);
+      await storeLastGameId(INITIAL_GAME_ID);
     }
     return result || INITIAL_GAME_ID;
   });
@@ -24,11 +24,11 @@ const getLastGameId = () =>
 const getNewGameId = () =>
   getLastGameId().then(lastGameId => {
     const newGameId = parseInt(lastGameId) + 1;
-    return setLastGameId(newGameId).then(() => newGameId);
+    return storeLastGameId(newGameId).then(() => newGameId);
   });
 
-const setGame = game => redisClient.set(game.id, JSON.stringify(game), EXPIRE, GAME_EXPIRE_TIME);
+const storeGame = game => redisClient.set(game.id, JSON.stringify(game), EXPIRE, GAME_EXPIRE_TIME);
 
 const getGame = gameId => redisClient.get(gameId).then(JSON.parse);
 
-module.exports = { redisClient, getNewGameId, setGame, getGame };
+module.exports = { redisClient, getNewGameId, storeGame, getGame };

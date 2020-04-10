@@ -18,9 +18,9 @@ const CARDS_VALUES_WITH_PROBABILITIES = [
 ];
 const INITIAL_NUMBERS_OF_CARDS_IN_HAND = 4;
 const CARD_TYPES_PROBABILITIES = [
-  [HEAL_CARD_TYPE_NUMBER, 0.33],
-  [SHIELD_CARD_TYPE_NUMBER, 0.33],
-  [DAMAGE_CARD_TYPE_NUMBER, 0.34]
+  [HEAL_CARD_TYPE_NUMBER, 0.2],
+  [SHIELD_CARD_TYPE_NUMBER, 0.3],
+  [DAMAGE_CARD_TYPE_NUMBER, 0.5]
 ];
 
 module.exports = class Player extends Entity {
@@ -47,5 +47,10 @@ module.exports = class Player extends Entity {
 
   wouldBeKilled(damage) {
     return damage >= this.hp + this.shield;
+  }
+
+  hasCard(card) {
+    const cardFound = this.cardsInHand.find(c => c.getType() === card.getType() && card.value === c.value);
+    return !!cardFound;
   }
 };

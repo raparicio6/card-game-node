@@ -16,7 +16,8 @@ module.exports = class Entity {
   }
 
   removeCardFromHand(card) {
-    this.cardsInHand.splice(this.cardsInHand.indexOf(card), 1);
+    const cardFound = this.cardsInHand.find(c => c.getType() === card.getType() && card.value === c.value);
+    this.cardsInHand.splice(this.cardsInHand.indexOf(cardFound), 1);
   }
 
   gainHp(hp) {
@@ -35,6 +36,10 @@ module.exports = class Entity {
     if (damageToHp > 0) {
       this.hp -= damageToHp;
     }
+  }
+
+  wasKilled() {
+    return this.hp <= 0;
   }
 
   // istanbul ignore next

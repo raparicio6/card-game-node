@@ -2,24 +2,18 @@ const Player = require('../models/player');
 const Monster = require('../models/monster');
 const Game = require('../models/game');
 const CardFactory = require('../models/cardFactory');
-const { getNewGameId, setGame, getGame } = require('../services/redis');
+const { getNewGameId, storeGame, getGame } = require('../services/redis');
 const { serializeGame, serializeCardsInHand, serializeEntityStatus } = require('../serializers/games');
-
-const addCardsToHand = (owner, opponent) => {
-  for (let i = 1; i <= owner.getNumberOfCardsInInitialHand(); i++) {
-    owner.addCardToHand(CardFactory.createCard(owner, opponent));
-  }
-};
+const { mapGameToInstance } = require('../mappers/games');
 
 exports.createGame = (req, res) => {
   const player = new Player(req.body.game.playerName);
   const monster = new Monster();
-  addCardsToHand(player, monster);
-  addCardsToHand(monster, player);
   return getNewGameId().then(gameId => {
     const game = new Game(gameId, player, monster);
-    const formattedGame = serializeGame(game);
-    return setGame(formattedGame.game).then(() => res.status(201).send(formattedGame));
+    game.prepareFirstTurn();
+    const serializedGame = serializeGame(game);
+    return storeGame(serializedGame.game).then(() => res.status(201).send(serializedGame));
   });
 };
 
@@ -31,4 +25,17 @@ exports.getEntityCards = (req, res) =>
 exports.getEntityStatus = (req, res) =>
   getGame(req.params.gameId).then(game => res.send(serializeEntityStatus(game, req.query.entity)));
 
-exports.playNextTurn = (req, res) => getGame(req.body.turn.gameId).then(game => {});
+exports.playNextPlayerAndMonsterTurns = (req, res) =>
+  getGame(req.body.gameId).then(game => {
+    const gameInstance = mapGameToInstance(game);
+    const { player, monster } = gameInstance;
+
+    const {
+      cardPlayed: { type, value }
+    } = req.body.turn;
+    const playerCardPlayed = CardFactory.getCardByTypeName(type, player, value, monster);
+
+    const monsterCardPlayed = gameInstance.playNextPlayerAndMonsterTurns(playerCardPlayed);
+    const serializedGame = serializeGame(gameInstance, monsterCardPlayed);
+    return storeGame(serializedGame.game).then(() => res.send(serializedGame));
+  });
