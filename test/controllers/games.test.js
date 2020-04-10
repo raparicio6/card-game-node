@@ -214,4 +214,49 @@ describe('PUT /turns', () => {
       expect(response.body.game).toHaveProperty('winner');
     });
   });
+  describe('Playing a card which is not in hand respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      const cardPlayed = { type: 'damage', value: '100' };
+      response = await request(app)
+        .put('/turns')
+        .send({ gameId: game.id, turn: { cardPlayed } });
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 400', () => {
+      expect(response.status).toBe(400);
+    });
+    it('internalCode is card_played_is_not_in_hand_error', () => {
+      expect(response.body.internalCode).toBe('card_played_is_not_in_hand_error');
+    });
+    it('message is Card played is not in hand', () => {
+      expect(response.body.message).toBe('Card played is not in hand');
+    });
+  });
+  describe('Not playing a card in a turn a card can be played respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame(game);
+      response = await request(app)
+        .put('/turns')
+        .send({ gameId: game.id, turn: {} });
+      return done();
+    });
+    afterAll(done => redisClient.flushall().then(() => done()));
+
+    it('status is 400', () => {
+      expect(response.status).toBe(400);
+    });
+    it('internalCode is card_was_not_played_error', () => {
+      expect(response.body.internalCode).toBe('card_was_not_played_error');
+    });
+    it('message is Card was not played in a turn that a card can be played', () => {
+      expect(response.body.message).toBe('Card was not played in a turn that a card can be played');
+    });
+  });
 });

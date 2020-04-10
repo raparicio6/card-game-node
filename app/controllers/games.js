@@ -25,17 +25,22 @@ exports.getEntityCards = (req, res) =>
 exports.getEntityStatus = (req, res) =>
   getGame(req.params.gameId).then(game => res.send(serializeEntityStatus(game, req.query.entity)));
 
-exports.playNextPlayerAndMonsterTurns = (req, res) =>
+exports.playNextPlayerAndMonsterTurns = (req, res, next) =>
   getGame(req.body.gameId).then(game => {
     const gameInstance = mapGameToInstance(game);
     const { player, monster } = gameInstance;
 
-    const {
-      cardPlayed: { type, value }
-    } = req.body.turn;
-    const playerCardPlayed = CardFactory.getCardByTypeName(type, player, value, monster);
+    const cardPlayed = req.body.turn.cardPlayed ? req.body.turn.cardPlayed : null;
+    const playerCardPlayed = cardPlayed
+      ? CardFactory.getCardByTypeName(cardPlayed.type, player, cardPlayed.value, monster)
+      : null;
 
-    const monsterCardPlayed = gameInstance.playNextPlayerAndMonsterTurns(playerCardPlayed);
+    let monsterCardPlayed = null;
+    try {
+      monsterCardPlayed = gameInstance.playNextPlayerAndMonsterTurns(playerCardPlayed);
+    } catch (error) {
+      return next(error);
+    }
     const serializedGame = serializeGame(gameInstance, monsterCardPlayed);
     return storeGame(serializedGame.game).then(() => res.send(serializedGame));
   });

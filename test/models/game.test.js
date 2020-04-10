@@ -6,6 +6,7 @@ const HealCard = require('../../app/models/healCard');
 const HorrorCard = require('../../app/models/horrorCard');
 const ShieldCard = require('../../app/models/shieldCard');
 const DamageCard = require('../../app/models/damageCard');
+const errors = require('../../app/errors');
 
 describe('Game', () => {
   let game = null;
@@ -62,29 +63,93 @@ describe('Game', () => {
   });
 
   describe('playing turns', () => {
-    it('playPlayerTurn', () => {
-      const healCard = new HealCard(player, 5);
-      player.addCardToHand(healCard);
-      const playerTurn = new Turn(player);
-      game.addTurn(playerTurn);
-      expect(game.turns.length).toBe(1);
-      expect(player.cardsInHand.length).toBe(1);
-      expect(playerTurn.cardPlayed).toBe(null);
-      game.playPlayerTurn(healCard);
-      expect(playerTurn.cardPlayed).toBe(healCard);
-      expect(player.cardsInHand.length).toBe(0);
-      expect(game.turns.length).toBe(2);
+    describe('playPlayerTurn', () => {
+      it('playPlayerTurn with cardCanBePlayed true and a card is played', () => {
+        const healCard = new HealCard(player, 5);
+        player.addCardToHand(healCard);
+        const playerTurn = new Turn(player);
+        game.addTurn(playerTurn);
+        expect(game.turns.length).toBe(1);
+        expect(player.cardsInHand.length).toBe(1);
+        expect(playerTurn.cardPlayed).toBe(null);
+        game.playPlayerTurn(healCard);
+        expect(playerTurn.cardPlayed).toBe(healCard);
+        expect(player.cardsInHand.length).toBe(0);
+        expect(game.turns.length).toBe(2);
+      });
+      it('playPlayerTurn with cardCanBePlayed false and a card is not played', () => {
+        const healCard = new HealCard(player, 5);
+        player.addCardToHand(healCard);
+        const playerTurn = new Turn(player);
+        playerTurn.cardCanBePlayed = false;
+        game.addTurn(playerTurn);
+        expect(game.turns.length).toBe(1);
+        expect(player.cardsInHand.length).toBe(1);
+        expect(playerTurn.cardPlayed).toBe(null);
+        game.playPlayerTurn();
+        expect(playerTurn.cardPlayed).toBe(null);
+        expect(player.cardsInHand.length).toBe(1);
+        expect(game.turns.length).toBe(2);
+      });
+      it('playPlayerTurn with cardCanBePlayed false and a card is played', () => {
+        const healCard = new HealCard(player, 5);
+        player.addCardToHand(healCard);
+        const playerTurn = new Turn(player);
+        playerTurn.cardCanBePlayed = false;
+        game.addTurn(playerTurn);
+        expect(game.turns.length).toBe(1);
+        expect(player.cardsInHand.length).toBe(1);
+        expect(playerTurn.cardPlayed).toBe(null);
+        game.playPlayerTurn(healCard);
+        expect(playerTurn.cardPlayed).toBe(null);
+        expect(player.cardsInHand.length).toBe(1);
+        expect(game.turns.length).toBe(2);
+      });
+      it('playPlayerTurn with cardCanBePlayed true and a card is not played', () => {
+        const playerTurn = new Turn(player);
+        game.addTurn(playerTurn);
+        try {
+          game.playPlayerTurn();
+        } catch (error) {
+          expect(error).toStrictEqual(errors.cardWasNotPlayedError());
+        }
+      });
+      it('playPlayerTurn with cardCanBePlayed true and a card not in hand is played', () => {
+        const healCard = new HealCard(player, 5);
+        const playerTurn = new Turn(player);
+        game.addTurn(playerTurn);
+        try {
+          game.playPlayerTurn(healCard);
+        } catch (error) {
+          expect(error).toStrictEqual(errors.cardPlayedIsNotInHandError());
+        }
+      });
     });
-    it('playMonsterTurn', () => {
-      const monsterTurn = new Turn(monster);
-      game.addTurn(monsterTurn);
-      expect(game.turns.length).toBe(1);
-      expect(monster.cardsInHand.length).toBe(0);
-      expect(monsterTurn.cardPlayed).toBe(null);
-      const cardPlayed = game.playMonsterTurn();
-      expect(monsterTurn.cardPlayed).toBe(cardPlayed);
-      expect(monster.cardsInHand.length).toBe(0);
-      expect(game.turns.length).toBe(2);
+    describe('playMonsterTurn', () => {
+      it('playMonsterTurn with cardCanBePlayed true', () => {
+        const monsterTurn = new Turn(monster);
+        game.addTurn(monsterTurn);
+        expect(game.turns.length).toBe(1);
+        expect(monster.cardsInHand.length).toBe(0);
+        expect(monsterTurn.cardPlayed).toBe(null);
+        const cardPlayed = game.playMonsterTurn();
+        expect(monsterTurn.cardPlayed).toBe(cardPlayed);
+        expect(monster.cardsInHand.length).toBe(0);
+        expect(game.turns.length).toBe(2);
+      });
+      it('playMonsterTurn with cardCanBePlayed false', () => {
+        const monsterTurn = new Turn(monster);
+        monsterTurn.cardCanBePlayed = false;
+        game.addTurn(monsterTurn);
+        expect(game.turns.length).toBe(1);
+        expect(monster.cardsInHand.length).toBe(0);
+        expect(monsterTurn.cardPlayed).toBe(null);
+        const cardPlayed = game.playMonsterTurn();
+        expect(cardPlayed).toBe(null);
+        expect(monsterTurn.cardPlayed).toBe(null);
+        expect(monster.cardsInHand.length).toBe(1);
+        expect(game.turns.length).toBe(2);
+      });
     });
     it('playNextPlayerAndMonsterTurns no winner', () => {
       const healCard = new HealCard(player, 5);

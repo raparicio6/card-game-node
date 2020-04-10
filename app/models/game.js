@@ -1,5 +1,6 @@
 const CardFactory = require('./cardFactory');
 const Turn = require('./turn');
+const errors = require('../errors');
 
 const MAX_TURNS = 12;
 
@@ -47,28 +48,42 @@ module.exports = class Game {
   }
 
   playPlayerTurn(cardPlayed) {
-    // chequear que pueda jugar el turno comparando con el turn de la db
-    // if (!player.hasCard(cardPlayed)){ // tira error si no tiene la carta
-    //   return error
-    // }
-    this.player.removeCardFromHand(cardPlayed);
     const currentTurn = this.getCurrentTurn();
-    currentTurn.cardPlayed = cardPlayed;
-
     const monsterNextTurn = new Turn(this.monster);
-    cardPlayed.applyEffect(monsterNextTurn);
+    if (!currentTurn.cardCanBePlayed) {
+      this.addTurn(monsterNextTurn);
+      return;
+    }
+
+    if (cardPlayed) {
+      if (!this.player.hasCard(cardPlayed)) {
+        throw errors.cardPlayedIsNotInHandError();
+      }
+
+      this.player.removeCardFromHand(cardPlayed);
+      currentTurn.cardPlayed = cardPlayed;
+      cardPlayed.applyEffect(monsterNextTurn);
+    } else {
+      throw errors.cardWasNotPlayedError();
+    }
+
     this.addTurn(monsterNextTurn);
   }
 
   playMonsterTurn() {
     this.entityDrawsCard(this.monster, this.player);
 
-    const cardPlayed = this.monster.playCard();
     const currentTurn = this.getCurrentTurn();
-    currentTurn.cardPlayed = cardPlayed;
-
     const playerNextTurn = new Turn(this.player);
+    if (!currentTurn.cardCanBePlayed) {
+      this.addTurn(playerNextTurn);
+      return null;
+    }
+
+    const cardPlayed = this.monster.playCard();
+    currentTurn.cardPlayed = cardPlayed;
     cardPlayed.applyEffect(playerNextTurn);
+
     this.addTurn(playerNextTurn);
     return cardPlayed;
   }
