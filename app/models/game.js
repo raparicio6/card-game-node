@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const CardFactory = require('./cardFactory');
 const Turn = require('./turn');
 const errors = require('../errors');
@@ -16,6 +17,10 @@ module.exports = class Game {
     this.player = player;
     this.monster = monster;
     this.turns = [];
+  }
+
+  static getNewId() {
+    return uuidv4();
   }
 
   prepareFirstTurn() {

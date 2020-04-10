@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const Player = require('../models/player');
 const Monster = require('../models/monster');
 const Game = require('../models/game');
@@ -11,7 +10,7 @@ const errors = require('../errors');
 exports.createGame = (req, res, next) => {
   const player = new Player(req.body.game.playerName);
   const monster = new Monster();
-  const gameId = uuidv4();
+  const gameId = Game.getNewId();
   const game = new Game(gameId, player, monster);
   game.prepareFirstTurn();
   const serializedGame = serializeGame(game);
