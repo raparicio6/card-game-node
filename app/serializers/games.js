@@ -1,25 +1,25 @@
-exports.serializeGame = (gameInstance, monsterCardPlayed = null) => {
-  const playerCardsInHand = gameInstance.player.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
-  const monsterCardsInHand = gameInstance.monster.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
-  const turns = gameInstance.turns.map(turn => JSON.parse(JSON.stringify(turn)));
+exports.serializeGame = ({ id, player, monster, turns, winner }, monsterCardPlayed = null) => {
+  const serializedPlayerCardsInHand = player.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
+  const serializedMonsterCardsInHand = monster.cardsInHand.map(card => JSON.parse(JSON.stringify(card)));
+  const serializedTurns = turns.map(turn => JSON.parse(JSON.stringify(turn)));
 
   return {
     game: {
-      id: gameInstance.id,
-      turns,
+      id,
+      turns: serializedTurns,
       player: {
-        name: gameInstance.player.name,
-        hp: gameInstance.player.hp,
-        shield: gameInstance.player.shield,
-        cardsInHand: playerCardsInHand
+        name: player.name,
+        hp: player.hp,
+        shield: player.shield,
+        cardsInHand: serializedPlayerCardsInHand
       },
       monster: {
-        hp: gameInstance.monster.hp,
-        shield: gameInstance.monster.shield,
-        cardsInHand: monsterCardsInHand
+        hp: monster.hp,
+        shield: monster.shield,
+        cardsInHand: serializedMonsterCardsInHand
       },
       monsterEffect: monsterCardPlayed ? JSON.parse(JSON.stringify(monsterCardPlayed)) : null,
-      winner: gameInstance.winner ? gameInstance.winner.constructor.name : null
+      winner: winner ? winner.constructor.name : null
     }
   };
 };
