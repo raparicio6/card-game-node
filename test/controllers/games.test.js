@@ -306,7 +306,7 @@ describe('GET /games/:gameId/status', () => {
   });
 });
 
-describe('PUT /turns', () => {
+describe('PUT /games/:gameId', () => {
   describe('Successful response', () => {
     let response = null;
     beforeAll(async done => {
@@ -314,8 +314,8 @@ describe('PUT /turns', () => {
       await storeGame(game);
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
-        .put('/turns')
-        .send({ gameId: game.id, turn: { cardPlayed } });
+        .put(`/games/${game.id}`)
+        .send({ turn: { cardPlayed } });
       return done();
     });
     afterAll(done => redisClient.flushdb().then(() => done()));
@@ -378,8 +378,8 @@ describe('PUT /turns', () => {
       await storeGame(game);
       const cardPlayed = { type: 'damage', value: '100' };
       response = await request(app)
-        .put('/turns')
-        .send({ gameId: game.id, turn: { cardPlayed } });
+        .put(`/games/${game.id}`)
+        .send({ turn: { cardPlayed } });
       return done();
     });
     afterAll(done => redisClient.flushdb().then(() => done()));
@@ -401,8 +401,8 @@ describe('PUT /turns', () => {
       await redisClient.flushdb();
       await storeGame(game);
       response = await request(app)
-        .put('/turns')
-        .send({ gameId: game.id, turn: {} });
+        .put(`/games/${game.id}`)
+        .send({ turn: {} });
       return done();
     });
     afterAll(done => redisClient.flushdb().then(() => done()));
@@ -424,8 +424,8 @@ describe('PUT /turns', () => {
       await redisClient.flushdb();
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
-        .put('/turns')
-        .send({ gameId: 'abcbca', turn: { cardPlayed } });
+        .put('/games/abcbca')
+        .send({ turn: { cardPlayed } });
       return done();
     });
 
@@ -447,8 +447,8 @@ describe('PUT /turns', () => {
       await storeGame({ ...game, monster: { ...game.monster, hp: 0 } });
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
-        .put('/turns')
-        .send({ gameId: game.id, turn: { cardPlayed } });
+        .put(`/games/${game.id}`)
+        .send({ turn: { cardPlayed } });
       return done();
     });
 
@@ -471,8 +471,8 @@ describe('PUT /turns', () => {
       await redisClient.quit();
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
-        .put('/turns')
-        .send({ gameId: game.id, turn: { cardPlayed } });
+        .put(`/games/${game.id}`)
+        .send({ turn: { cardPlayed } });
       return done();
     });
     afterAll(async done => {

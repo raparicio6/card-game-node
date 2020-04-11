@@ -50,7 +50,7 @@ exports.getEntityStatus = (req, res, next) =>
     .catch(error => next(errors.databaseError(error.message)));
 
 exports.playNextPlayerAndMonsterTurns = (req, res, next) =>
-  getGame(req.body.gameId)
+  getGame(req.params.gameId)
     .then(game => {
       if (!game) {
         return next(errors.gameWasNotFoundError());

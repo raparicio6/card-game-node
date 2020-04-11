@@ -13,6 +13,6 @@ exports.init = app => {
   app.get('/games/:gameId/cards_in_hand', getEntityCards);
   app.get('/games/:gameId/status', getEntityStatus);
   app.get('/games/:gameId', getGame);
+  app.put('/games/:gameId', playNextPlayerAndMonsterTurns);
   app.post('/games', createGame);
-  app.put('/turns', playNextPlayerAndMonsterTurns);
 };
