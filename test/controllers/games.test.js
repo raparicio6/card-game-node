@@ -8,13 +8,13 @@ describe('POST /games', () => {
   describe('Successful response', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       response = await request(app)
         .post('/games')
         .send({ game: { playerName: 'Fred' } });
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 201', () => {
       expect(response.status).toBe(201);
@@ -81,7 +81,7 @@ describe('POST /games', () => {
   describe('Redis error respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       await redisClient.quit();
       response = await request(app)
@@ -91,7 +91,7 @@ describe('POST /games', () => {
     });
     afterAll(async done => {
       await redisClient.connect();
-      await redisClient.flushall();
+      await redisClient.flushdb();
       return done;
     });
 
@@ -111,12 +111,12 @@ describe('GET /games/:gameId', () => {
   describe('Successful response', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       response = await request(app).get(`/games/${game.id}`);
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 200', () => {
       expect(response.status).toBe(200);
@@ -129,7 +129,7 @@ describe('GET /games/:gameId', () => {
   describe('Game not exists respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       response = await request(app).get('/games/abcbca');
       return done();
     });
@@ -148,7 +148,7 @@ describe('GET /games/:gameId', () => {
   describe('Redis error respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       await redisClient.quit();
       response = await request(app).get(`/games/${game.id}`);
@@ -156,7 +156,7 @@ describe('GET /games/:gameId', () => {
     });
     afterAll(async done => {
       await redisClient.connect();
-      await redisClient.flushall();
+      await redisClient.flushdb();
       return done;
     });
 
@@ -176,14 +176,14 @@ describe('GET /games/:gameId/cards_in_hand', () => {
   describe('Successful response', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       response = await request(app)
         .get(`/games/${game.id}/cards_in_hand`)
         .query({ entity: 'player' });
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 200', () => {
       expect(response.status).toBe(200);
@@ -196,7 +196,7 @@ describe('GET /games/:gameId/cards_in_hand', () => {
   describe('Game not exists respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       response = await request(app)
         .get('/games/abcbca/cards_in_hand')
         .query({ entity: 'player' });
@@ -217,7 +217,7 @@ describe('GET /games/:gameId/cards_in_hand', () => {
   describe('Redis error respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       await redisClient.quit();
       response = await request(app)
@@ -227,7 +227,7 @@ describe('GET /games/:gameId/cards_in_hand', () => {
     });
     afterAll(async done => {
       await redisClient.connect();
-      await redisClient.flushall();
+      await redisClient.flushdb();
       return done;
     });
 
@@ -247,14 +247,14 @@ describe('GET /games/:gameId/status', () => {
   describe('Successful response', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       response = await request(app)
         .get(`/games/${game.id}/status`)
         .query({ entity: 'monster' });
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 200', () => {
       expect(response.status).toBe(200);
@@ -267,7 +267,7 @@ describe('GET /games/:gameId/status', () => {
   describe('Game not exists respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       response = await request(app)
         .get('/games/abcbca/status')
         .query({ entity: 'monster' });
@@ -288,7 +288,7 @@ describe('GET /games/:gameId/status', () => {
   describe('Redis error respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       await redisClient.quit();
       response = await request(app)
@@ -298,7 +298,7 @@ describe('GET /games/:gameId/status', () => {
     });
     afterAll(async done => {
       await redisClient.connect();
-      await redisClient.flushall();
+      await redisClient.flushdb();
       return done;
     });
 
@@ -318,7 +318,7 @@ describe('PUT /turns', () => {
   describe('Successful response', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
@@ -326,7 +326,7 @@ describe('PUT /turns', () => {
         .send({ gameId: game.id, turn: { cardPlayed } });
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 200', () => {
       expect(response.status).toBe(200);
@@ -390,7 +390,7 @@ describe('PUT /turns', () => {
   describe('Playing a card which is not in hand respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       const cardPlayed = { type: 'damage', value: '100' };
       response = await request(app)
@@ -398,7 +398,7 @@ describe('PUT /turns', () => {
         .send({ gameId: game.id, turn: { cardPlayed } });
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 400', () => {
       expect(response.status).toBe(400);
@@ -414,14 +414,14 @@ describe('PUT /turns', () => {
   describe('Not playing a card in a turn a card can be played respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       response = await request(app)
         .put('/turns')
         .send({ gameId: game.id, turn: {} });
       return done();
     });
-    afterAll(done => redisClient.flushall().then(() => done()));
+    afterAll(done => redisClient.flushdb().then(() => done()));
 
     it('status is 400', () => {
       expect(response.status).toBe(400);
@@ -437,7 +437,7 @@ describe('PUT /turns', () => {
   describe('Game not exists respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
         .put('/turns')
@@ -459,7 +459,7 @@ describe('PUT /turns', () => {
   describe('Game already finished respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame({ ...game, monster: { ...game.monster, hp: 0 } });
       const cardPlayed = game.player.cardsInHand[0];
       response = await request(app)
@@ -482,7 +482,7 @@ describe('PUT /turns', () => {
   describe('Redis error respond with error', () => {
     let response = null;
     beforeAll(async done => {
-      await redisClient.flushall();
+      await redisClient.flushdb();
       await storeGame(game);
       await redisClient.quit();
       const cardPlayed = game.player.cardsInHand[0];
@@ -493,7 +493,7 @@ describe('PUT /turns', () => {
     });
     afterAll(async done => {
       await redisClient.connect();
-      await redisClient.flushall();
+      await redisClient.flushdb();
       return done;
     });
 

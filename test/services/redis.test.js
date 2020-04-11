@@ -2,8 +2,8 @@ const { redisClient, storeGame, getNewGameNumberId, getGame } = require('../../a
 const { game } = require('../testUtils/schemas/gamesSchemas');
 
 describe('Redis service', () => {
-  beforeEach(done => redisClient.flushall().then(() => done()));
-  afterAll(done => redisClient.flushall().then(() => done()));
+  beforeEach(done => redisClient.flushdb().then(() => done()));
+  afterAll(done => redisClient.flushdb().then(() => done()));
 
   it('getNewGameNumberId with no game ids stored is 1', async () => {
     expect(await getNewGameNumberId()).toBe(1);

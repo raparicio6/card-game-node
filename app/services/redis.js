@@ -14,7 +14,7 @@ const redisClient = new Redis({
   port: config.redis.port || 6379,
   host: config.redis.host || 'localhost',
   password: config.redis.password,
-  db: 0
+  db: parseInt(config.redis.name)
 });
 
 const storeLastGameNumberId = id => redisClient.set(LAST_GAME_NUMBER_ID_KEY, id);

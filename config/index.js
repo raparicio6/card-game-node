@@ -1,7 +1,27 @@
 const ENVIRONMENT = process.env.NODE_ENV || 'development';
-const dotenv = require('dotenv');
 
-if (ENVIRONMENT !== 'production') dotenv.config();
+// eslint-disable-next-line global-require
+if (ENVIRONMENT !== 'production') require('dotenv').config();
+
+const configFile = `./${ENVIRONMENT}`;
+
+const isObject = variable => variable instanceof Object;
+
+/*
+ * Deep immutable copy of source object into tarjet object and returns a new object.
+ */
+const deepMerge = (target, source) => {
+  if (isObject(target) && isObject(source)) {
+    return Object.keys(source).reduce(
+      (output, key) => ({
+        ...output,
+        [key]: isObject(source[key]) && key in target ? deepMerge(target[key], source[key]) : source[key]
+      }),
+      { ...target }
+    );
+  }
+  return target;
+};
 
 const config = {
   common: {
@@ -13,9 +33,11 @@ const config = {
     redis: {
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
-      password: process.env.REDIS_PASSWORD
+      password: process.env.REDIS_PASSWORD,
+      name: process.env.REDIS_NAME
     }
   }
 };
 
-module.exports = config;
+const customConfig = require(configFile).config;
+module.exports = deepMerge(config, customConfig);
