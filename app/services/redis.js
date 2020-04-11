@@ -23,8 +23,8 @@ const getLastGameNumberId = () =>
 
 const getNewGameNumberId = () =>
   getLastGameNumberId().then(lastGameNumberId => {
-    const newGameId = parseInt(lastGameNumberId) + 1;
-    return storeLastGameNumberId(newGameId).then(() => newGameId);
+    const newGameNumberId = parseInt(lastGameNumberId) + 1;
+    return storeLastGameNumberId(newGameNumberId).then(() => newGameNumberId);
   });
 
 const storeGame = game => redisClient.set(game.id, JSON.stringify(game), EXPIRE, GAME_EXPIRE_TIME);
