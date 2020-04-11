@@ -16,37 +16,37 @@ const getTurnInstance = (cardCanBePlayed, entityWhoPlaysInstance, cardInstance) 
 const getCardInstance = ({ type, value }, ownerInstance, opponentInstance) =>
   CardFactory.getCardByTypeName(type, ownerInstance, value, opponentInstance);
 
-const getPlayerInstance = player => {
-  const playerInstance = new Player(player.name);
-  playerInstance.hp = player.hp;
-  playerInstance.shield = player.shield;
+const getPlayerInstance = ({ name, hp, shield }) => {
+  const playerInstance = new Player(name);
+  playerInstance.hp = hp;
+  playerInstance.shield = shield;
   return playerInstance;
 };
 
-const getMonsterInstance = monster => {
+const getMonsterInstance = ({ hp, shield }) => {
   const monsterInstance = new Monster();
-  monsterInstance.hp = monster.hp;
-  monsterInstance.shield = monster.shield;
+  monsterInstance.hp = hp;
+  monsterInstance.shield = shield;
   return monsterInstance;
 };
 
 const addCardsToHand = (cards, owner, opponent) =>
   cards.forEach(({ type, value }) => owner.addCardToHand(getCardInstance({ type, value }, owner, opponent)));
 
-exports.mapGameToInstance = game => {
-  const player = getPlayerInstance(game.player);
-  const monster = getMonsterInstance(game.monster);
-  addCardsToHand(game.player.cardsInHand, player, monster);
-  addCardsToHand(game.monster.cardsInHand, monster, player);
-  const gameInstance = new Game(game.id, player, monster);
-  const turns = game.turns.map(({ cardCanBePlayed, entityWhoPlays, cardPlayed }) => {
-    const entityWhoPlaysInstance = entityWhoPlays === PLAYER ? player : monster;
-    const opponentInstance = entityWhoPlaysInstance === player ? monster : player;
+exports.mapGameToInstance = ({ id, player, monster, turns }) => {
+  const playerInstance = getPlayerInstance(player);
+  const monsterInstance = getMonsterInstance(monster);
+  addCardsToHand(player.cardsInHand, playerInstance, monsterInstance);
+  addCardsToHand(monster.cardsInHand, monsterInstance, playerInstance);
+  const gameInstance = new Game(id, playerInstance, monsterInstance);
+  const turnsInstances = turns.map(({ cardCanBePlayed, entityWhoPlays, cardPlayed }) => {
+    const entityWhoPlaysInstance = entityWhoPlays === PLAYER ? playerInstance : monsterInstance;
+    const opponentInstance = entityWhoPlaysInstance === playerInstance ? monsterInstance : playerInstance;
     const cardInstance = cardPlayed
       ? getCardInstance(cardPlayed, entityWhoPlaysInstance, opponentInstance)
       : null;
     return getTurnInstance(cardCanBePlayed, entityWhoPlaysInstance, cardInstance);
   });
-  turns.forEach(turn => gameInstance.addTurn(turn));
+  turnsInstances.forEach(turnInstance => gameInstance.addTurn(turnInstance));
   return gameInstance;
 };
