@@ -4,7 +4,7 @@ const {
   HEAL_CARD_TYPE_NUMBER,
   SHIELD_CARD_TYPE_NUMBER,
   PLAYER_MAX_POSSIBLE_CARD_VALUE
-} = require('../constants');
+} = require('./constants');
 
 const INITIAL_HP = 20;
 const MAX_HP = 20;
@@ -17,7 +17,7 @@ const CARDS_VALUES_WITH_PROBABILITIES = [
   [PLAYER_MAX_POSSIBLE_CARD_VALUE, 0.1]
 ];
 const INITIAL_NUMBERS_OF_CARDS_IN_HAND = 4;
-const CARD_TYPES_PROBABILITIES = [
+const CARDS_TYPES_PROBABILITIES = [
   [HEAL_CARD_TYPE_NUMBER, 0.2],
   [SHIELD_CARD_TYPE_NUMBER, 0.3],
   [DAMAGE_CARD_TYPE_NUMBER, 0.5]
@@ -42,6 +42,6 @@ module.exports = class Player extends Entity {
   }
 
   get cardsTypesProbabilities() {
-    return CARD_TYPES_PROBABILITIES;
+    return CARDS_TYPES_PROBABILITIES;
   }
 };

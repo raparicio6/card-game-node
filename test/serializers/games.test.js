@@ -1,4 +1,8 @@
-const { serializeGame, serializeCardsInHand, serializeEntityStatus } = require('../../app/serializers/games');
+const {
+  serializeGame,
+  serializeEntityCardsInHand,
+  serializeEntityStatus
+} = require('../../app/serializers/games');
 const { game, getGameInstance } = require('../testUtils/schemas/gamesSchemas');
 const Player = require('../../app/models/player');
 const Monster = require('../../app/models/monster');
@@ -24,13 +28,13 @@ describe('serializeGame', () => {
   });
 });
 
-describe('serializeCardsInHand', () => {
+describe('serializeEntityCardsInHand', () => {
   it('player serializedCardsInHand matchs with player cardsInHand in game', () => {
-    const serializedCardsInHand = serializeCardsInHand(game, 'player');
+    const serializedCardsInHand = serializeEntityCardsInHand(game, 'player');
     expect(serializedCardsInHand).toMatchObject({ cardsInHand: game.player.cardsInHand });
   });
   it('monster serializedCardsInHand matchs with monster cardsInHand in game', () => {
-    const serializedCardsInHand = serializeCardsInHand(game, 'monster');
+    const serializedCardsInHand = serializeEntityCardsInHand(game, 'monster');
     expect(serializedCardsInHand).toMatchObject({ cardsInHand: game.monster.cardsInHand });
   });
 });

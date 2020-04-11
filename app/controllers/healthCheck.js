@@ -1,10 +1,8 @@
-const { redisClient } = require('../services/redis');
-const {
-  EXPIRE,
-  REDIS_HEALTH_EXPIRE_TIME,
-  REDIS_HEALTH_KEY,
-  REDIS_HEALTH_DEFAULT_VALUE
-} = require('../constants');
+const { redisClient, EXPIRE, THREE_SECONDS } = require('../services/redis');
+
+const REDIS_HEALTH_KEY = 'health';
+const REDIS_HEALTH_DEFAULT_VALUE = 'ok';
+const REDIS_HEALTH_EXPIRE_TIME = THREE_SECONDS;
 
 exports.healthCheck = (_, res) => res.send({ uptime: process.uptime() });
 

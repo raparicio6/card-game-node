@@ -1,5 +1,5 @@
 const Card = require('./card');
-const { HORROR_CARD_TYPE_NAME } = require('../constants');
+const { HORROR_CARD_TYPE_NAME } = require('./constants');
 
 module.exports = class HorrorCard extends Card {
   get type() {

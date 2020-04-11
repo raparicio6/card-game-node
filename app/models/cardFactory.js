@@ -12,7 +12,7 @@ const {
   HEAL_CARD_TYPE_NAME,
   SHIELD_CARD_TYPE_NAME,
   HORROR_CARD_TYPE_NAME
-} = require('../constants');
+} = require('./constants');
 
 const numbersWithCardsTypesMap = (owner, value, opponent) => ({
   [HEAL_CARD_TYPE_NUMBER]: new HealCard(owner, value),

@@ -9,7 +9,7 @@ const {
   SHIELD_CARD_TYPE_NAME,
   HORROR_CARD_TYPE_NAME,
   PLAYER_MAX_POSSIBLE_CARD_VALUE
-} = require('../constants');
+} = require('./constants');
 
 const INITIAL_HP = 20;
 const MAX_HP = 20;
@@ -22,7 +22,7 @@ const CARDS_VALUES_WITH_PROBABILITIES = [
   [10, 0.1]
 ];
 const INITIAL_NUMBERS_OF_CARDS_IN_HAND = 4;
-const CARD_TYPES_PROBABILITIES = [
+const CARDS_TYPES_PROBABILITIES = [
   [HEAL_CARD_TYPE_NUMBER, 0.35],
   [SHIELD_CARD_TYPE_NUMBER, 0.25],
   [DAMAGE_CARD_TYPE_NUMBER, 0.3],
@@ -47,7 +47,7 @@ module.exports = class Monster extends Entity {
   }
 
   get cardsTypesProbabilities() {
-    return CARD_TYPES_PROBABILITIES;
+    return CARDS_TYPES_PROBABILITIES;
   }
 
   playCard() {

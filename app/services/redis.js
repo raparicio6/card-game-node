@@ -1,8 +1,14 @@
 const Redis = require('ioredis');
 const config = require('../../config').common;
-const { LAST_GAME_NUMBER_ID_KEY, EXPIRE, GAME_EXPIRE_TIME } = require('../constants');
 
+const THREE_SECONDS = 3;
+const THREE_HOURS = 10800;
+const EXPIRE = 'EX';
+
+const LAST_GAME_NUMBER_ID_KEY = 'lastGameNumberId';
 const INITIAL_GAME_NUMBER_ID = 0;
+
+const GAME_EXPIRE_TIME = THREE_HOURS;
 
 const redisClient = new Redis({
   port: config.redis.port || 6379,
@@ -31,4 +37,4 @@ const storeGame = game => redisClient.set(game.id, JSON.stringify(game), EXPIRE,
 
 const getGame = gameId => redisClient.get(gameId).then(JSON.parse);
 
-module.exports = { redisClient, getNewGameNumberId, storeGame, getGame };
+module.exports = { redisClient, getNewGameNumberId, storeGame, getGame, THREE_SECONDS, EXPIRE };

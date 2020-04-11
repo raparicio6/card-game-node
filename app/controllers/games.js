@@ -3,7 +3,7 @@ const Monster = require('../models/monster');
 const Game = require('../models/game');
 const CardFactory = require('../models/cardFactory');
 const { storeGame, getGame } = require('../services/redis');
-const { serializeGame, serializeCardsInHand, serializeEntityStatus } = require('../serializers/games');
+const { serializeGame, serializeEntityCardsInHand, serializeEntityStatus } = require('../serializers/games');
 const { mapGameToInstance } = require('../mappers/games');
 const errors = require('../errors');
 
@@ -35,7 +35,7 @@ exports.getEntityCards = (req, res, next) =>
       if (!game) {
         return next(errors.gameWasNotFoundError());
       }
-      return res.send(serializeCardsInHand(game, req.query.entity));
+      return res.send(serializeEntityCardsInHand(game, req.query.entity));
     })
     .catch(error => next(errors.databaseError(error.message)));
 

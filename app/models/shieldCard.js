@@ -1,5 +1,5 @@
 const Card = require('./card');
-const { SHIELD_CARD_TYPE_NAME } = require('../constants');
+const { SHIELD_CARD_TYPE_NAME } = require('./constants');
 
 module.exports = class ShieldCard extends Card {
   constructor(owner, value) {

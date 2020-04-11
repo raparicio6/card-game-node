@@ -24,6 +24,6 @@ exports.serializeGame = ({ id, player, monster, turns, winner }, monsterCardPlay
   };
 };
 
-exports.serializeCardsInHand = (game, entity) => ({ cardsInHand: game[entity].cardsInHand });
+exports.serializeEntityCardsInHand = (game, entity) => ({ cardsInHand: game[entity].cardsInHand });
 
 exports.serializeEntityStatus = (game, entity) => ({ hp: game[entity].hp, shield: game[entity].shield });
