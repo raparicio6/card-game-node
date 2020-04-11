@@ -17,7 +17,7 @@ describe('ShieldCard', () => {
     expect(shieldCard.owner).toBe(player);
   });
   it('shieldCard applyEffect changes owner shield from 0 to 5', () => {
-    expect(player.shield).toBe(0);
+    player.shield = 0;
     shieldCard.applyEffect();
     expect(shieldCard.owner.shield).toBe(5);
   });

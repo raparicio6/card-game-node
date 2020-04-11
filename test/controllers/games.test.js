@@ -23,16 +23,10 @@ describe('POST /games', () => {
       expect(response.body).toHaveProperty('game');
     });
     it('game has id property', () => {
-      expect(response.body.game).toHaveProperty('id');
-    });
-    it('id is string', () => {
-      expect(typeof response.body.game.id).toBe('string');
+      expect(response.body.game).toHaveProperty('id', expect.any(String));
     });
     it('game has turns property', () => {
-      expect(response.body.game).toHaveProperty('turns');
-    });
-    it('turns is array', () => {
-      expect(Array.isArray(response.body.game.turns)).toBe(true);
+      expect(response.body.game).toHaveProperty('turns', expect.any(Array));
     });
     it('turns has one element', () => {
       expect(response.body.game.turns.length).toBe(1);
@@ -50,10 +44,7 @@ describe('POST /games', () => {
       expect(response.body.game.player).toHaveProperty('shield');
     });
     it('player has cardsInHand property', () => {
-      expect(response.body.game.player).toHaveProperty('cardsInHand');
-    });
-    it('player cardsInHand is array', () => {
-      expect(Array.isArray(response.body.game.player.cardsInHand)).toBe(true);
+      expect(response.body.game.player).toHaveProperty('cardsInHand', expect.any(Array));
     });
     it('game has monster property', () => {
       expect(response.body.game).toHaveProperty('monster');
@@ -65,16 +56,17 @@ describe('POST /games', () => {
       expect(response.body.game.monster).toHaveProperty('shield');
     });
     it('monster has cardsInHand property', () => {
-      expect(response.body.game.monster).toHaveProperty('cardsInHand');
-    });
-    it('monster cardsInHand is array', () => {
-      expect(Array.isArray(response.body.game.monster.cardsInHand)).toBe(true);
+      expect(response.body.game.monster).toHaveProperty('cardsInHand', expect.any(Array));
     });
     it('game has monsterEffect property', () => {
       expect(response.body.game).toHaveProperty('monsterEffect');
     });
     it('game has winner property', () => {
       expect(response.body.game).toHaveProperty('winner');
+    });
+    it('game only has mentioned properties', () => {
+      const properties = ['id', 'player', 'monster', 'turns', 'winner', 'monsterEffect'];
+      expect(properties).toEqual(expect.arrayContaining(Object.keys(response.body.game)));
     });
   });
 
@@ -335,16 +327,10 @@ describe('PUT /turns', () => {
       expect(response.body).toHaveProperty('game');
     });
     it('game has id property', () => {
-      expect(response.body.game).toHaveProperty('id');
-    });
-    it('id is string', () => {
-      expect(typeof response.body.game.id).toBe('string');
+      expect(response.body.game).toHaveProperty('id', expect.any(String));
     });
     it('game has turns property', () => {
-      expect(response.body.game).toHaveProperty('turns');
-    });
-    it('turns is array', () => {
-      expect(Array.isArray(response.body.game.turns)).toBe(true);
+      expect(response.body.game).toHaveProperty('turns', expect.any(Array));
     });
     it('game has player property', () => {
       expect(response.body.game).toHaveProperty('player');
@@ -359,10 +345,7 @@ describe('PUT /turns', () => {
       expect(response.body.game.player).toHaveProperty('shield');
     });
     it('player has cardsInHand property', () => {
-      expect(response.body.game.player).toHaveProperty('cardsInHand');
-    });
-    it('player cardsInHand is array', () => {
-      expect(Array.isArray(response.body.game.player.cardsInHand)).toBe(true);
+      expect(response.body.game.player).toHaveProperty('cardsInHand', expect.any(Array));
     });
     it('game has monster property', () => {
       expect(response.body.game).toHaveProperty('monster');
@@ -374,16 +357,17 @@ describe('PUT /turns', () => {
       expect(response.body.game.monster).toHaveProperty('shield');
     });
     it('monster has cardsInHand property', () => {
-      expect(response.body.game.monster).toHaveProperty('cardsInHand');
-    });
-    it('monster cardsInHand is array', () => {
-      expect(Array.isArray(response.body.game.monster.cardsInHand)).toBe(true);
+      expect(response.body.game.monster).toHaveProperty('cardsInHand', expect.any(Array));
     });
     it('game has monsterEffect property', () => {
       expect(response.body.game).toHaveProperty('monsterEffect');
     });
     it('game has winner property', () => {
       expect(response.body.game).toHaveProperty('winner');
+    });
+    it('game only has mentioned properties', () => {
+      const properties = ['id', 'player', 'monster', 'turns', 'winner', 'monsterEffect'];
+      expect(properties).toEqual(expect.arrayContaining(Object.keys(response.body.game)));
     });
   });
 

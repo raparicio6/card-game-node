@@ -23,6 +23,7 @@ describe('serializeGame', () => {
     const player = new Player('Fred');
     const monster = new Monster();
     const card = new DamageCard(monster, 8, player);
+    monster.addCardToHand(card);
     const serializedGame = serializeGame(getGameInstance(monster, player), card);
     expect(serializedGame.game.monsterEffect).toMatchObject(JSON.parse(JSON.stringify(card)));
   });

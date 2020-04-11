@@ -108,24 +108,20 @@ describe('Game', () => {
       expect(player.cardsInHand.length).toBe(1);
       expect(game.turns.length).toBe(2);
     });
-    it('playPlayerTurn with cardCanBePlayed true and a card is not played', () => {
+    it('playPlayerTurn with cardCanBePlayed true and a card is not played throws cardWasNotPlayedError', () => {
       const playerTurn = new Turn(player);
       game.addTurn(playerTurn);
-      try {
+      expect(() => {
         game.playPlayerTurn();
-      } catch (error) {
-        expect(error).toStrictEqual(errors.cardWasNotPlayedError());
-      }
+      }).toThrowError(errors.cardWasNotPlayedError());
     });
-    it('playPlayerTurn with cardCanBePlayed true and a card not in hand is played', () => {
+    it('playPlayerTurn with cardCanBePlayed true and a card not in hand is played throws cardPlayedIsNotInHandError', () => {
       const healCard = new HealCard(player, 5);
       const playerTurn = new Turn(player);
       game.addTurn(playerTurn);
-      try {
+      expect(() => {
         game.playPlayerTurn(healCard);
-      } catch (error) {
-        expect(error).toStrictEqual(errors.cardPlayedIsNotInHandError());
-      }
+      }).toThrowError(errors.cardPlayedIsNotInHandError());
     });
   });
 
@@ -222,13 +218,11 @@ describe('Game', () => {
       expect(monsterEffect).toBe(damageCard);
       expect(monster.cardsInHand.length).toBe(1);
     });
-    it('playNextPlayerAndMonsterTurns with game already finished returns gameIsAlreadyFinishedError', () => {
+    it('playNextPlayerAndMonsterTurns with game already finished throws gameIsAlreadyFinishedError', () => {
       monster.hp = 0;
-      try {
+      expect(() => {
         game.playNextPlayerAndMonsterTurns();
-      } catch (error) {
-        expect(error).toStrictEqual(errors.gameIsAlreadyFinishedError());
-      }
+      }).toThrowError(errors.gameIsAlreadyFinishedError());
     });
   });
 });

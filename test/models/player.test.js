@@ -77,7 +77,7 @@ describe('Player', () => {
 
   describe('gainHp', () => {
     it('player with already max hp gains 0 hp using gainHp with 10', () => {
-      expect(player.hp).toBe(20);
+      player.hp = 20;
       player.gainHp(10);
       expect(player.hp).toBe(20);
     });
@@ -90,21 +90,21 @@ describe('Player', () => {
 
   describe('takeDamage', () => {
     it('player with 0 shield loses 10 hp using takeDamage with 10', () => {
-      expect(player.shield).toBe(0);
-      expect(player.hp).toBe(20);
+      player.shield = 0;
+      player.hp = 20;
       player.takeDamage(10);
       expect(player.hp).toBe(10);
     });
     it('player with 10 shield loses 0 hp and 10 shield using takeDamage with 10', () => {
       player.shield = 10;
-      expect(player.hp).toBe(20);
+      player.hp = 20;
       player.takeDamage(10);
       expect(player.hp).toBe(20);
       expect(player.shield).toBe(0);
     });
     it('player with 5 shield loses 5 hp and 5 shield using takeDamage with 10', () => {
       player.shield = 5;
-      expect(player.hp).toBe(20);
+      player.hp = 20;
       player.takeDamage(10);
       expect(player.hp).toBe(15);
       expect(player.shield).toBe(0);

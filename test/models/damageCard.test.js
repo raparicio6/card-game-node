@@ -23,13 +23,13 @@ describe('DamageCard', () => {
     expect(damageCard.opponent).toBe(monster);
   });
   it('damageCard applyEffect reduces opponent shield from 10 to 5', () => {
-    expect(monster.shield).toBe(10);
+    monster.shield = 10;
     damageCard.applyEffect();
     expect(monster.shield).toBe(5);
   });
   it('damageCard applyEffect with opponent with 0 shield reduces opponent hp from 10 to 5', () => {
     monster.shield = 0;
-    expect(monster.hp).toBe(20);
+    monster.hp = 20;
     damageCard.applyEffect();
     expect(monster.hp).toBe(15);
   });

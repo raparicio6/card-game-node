@@ -19,12 +19,24 @@ describe('CardFactory', () => {
     it('createCard for player', () => {
       const card = CardFactory.createCard(player, monster);
       expect([HealCard.name, DamageCard.name, ShieldCard.name]).toContain(card.constructor.name);
+      expect(['heal', 'damage', 'shield']).toContain(card.type);
+      expect(card.value).toStrictEqual(expect.any(Number));
+      if (card.type === 'damage') {
+        expect(card.opponent).toBe(monster);
+      }
     });
     it('createCard for monster', () => {
       const card = CardFactory.createCard(monster, player);
       expect([HealCard.name, DamageCard.name, ShieldCard.name, HorrorCard.name]).toContain(
         card.constructor.name
       );
+      expect(['heal', 'damage', 'shield', 'horror']).toContain(card.type);
+      if (card.type !== 'horror') {
+        expect(card.value).toStrictEqual(expect.any(Number));
+      }
+      if (card.type === 'damage') {
+        expect(card.opponent).toBe(player);
+      }
     });
   });
 

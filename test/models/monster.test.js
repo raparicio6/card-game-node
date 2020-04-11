@@ -80,7 +80,7 @@ describe('Monster', () => {
 
   describe('gainHp', () => {
     it('monster with already max hp gains 0 hp using gainHp with 10', () => {
-      expect(monster.hp).toBe(20);
+      monster.hp = 20;
       monster.gainHp(10);
       expect(monster.hp).toBe(20);
     });
@@ -109,20 +109,20 @@ describe('Monster', () => {
   describe('takeDamage', () => {
     it('monster with 0 shield loses 10 hp using takeDamage with 10', () => {
       monster.shield = 0;
-      expect(monster.hp).toBe(20);
+      monster.hp = 20;
       monster.takeDamage(10);
       expect(monster.hp).toBe(10);
     });
     it('monster with 10 shield loses 0 hp and 10 shield using takeDamage with 10', () => {
-      expect(monster.shield).toBe(10);
-      expect(monster.hp).toBe(20);
+      monster.shield = 10;
+      monster.hp = 20;
       monster.takeDamage(10);
       expect(monster.hp).toBe(20);
       expect(monster.shield).toBe(0);
     });
     it('monster with 5 shield loses 5 hp and 5 shield using takeDamage with 10', () => {
       monster.shield = 5;
-      expect(monster.hp).toBe(20);
+      monster.hp = 20;
       monster.takeDamage(10);
       expect(monster.hp).toBe(15);
       expect(monster.shield).toBe(0);
