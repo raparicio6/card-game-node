@@ -92,6 +92,10 @@ module.exports = class Game {
   }
 
   playNextPlayerAndMonsterTurns(playerCardPlayed) {
+    if (this.winner) {
+      throw errors.gameIsAlreadyFinishedError();
+    }
+
     this.playPlayerTurn(playerCardPlayed);
     if (this.winner) {
       return null;

@@ -23,7 +23,7 @@ exports.getGame = (req, res, next) =>
   getGame(req.params.gameId)
     .then(game => {
       if (!game) {
-        return next(errors.gameWasNotFound());
+        return next(errors.gameWasNotFoundError());
       }
       return res.send({ game });
     })
@@ -33,7 +33,7 @@ exports.getEntityCards = (req, res, next) =>
   getGame(req.params.gameId)
     .then(game => {
       if (!game) {
-        return next(errors.gameWasNotFound());
+        return next(errors.gameWasNotFoundError());
       }
       return res.send(serializeCardsInHand(game, req.query.entity));
     })
@@ -43,7 +43,7 @@ exports.getEntityStatus = (req, res, next) =>
   getGame(req.params.gameId)
     .then(game => {
       if (!game) {
-        return next(errors.gameWasNotFound());
+        return next(errors.gameWasNotFoundError());
       }
       return res.send(serializeEntityStatus(game, req.query.entity));
     })
@@ -53,7 +53,7 @@ exports.playNextPlayerAndMonsterTurns = (req, res, next) =>
   getGame(req.body.gameId)
     .then(game => {
       if (!game) {
-        return next(errors.gameWasNotFound());
+        return next(errors.gameWasNotFoundError());
       }
       const gameInstance = mapGameToInstance(game);
       const { player, monster } = gameInstance;

@@ -137,8 +137,8 @@ describe('GET /games/:gameId', () => {
     it('status is 404', () => {
       expect(response.status).toBe(404);
     });
-    it('internalCode is game_was_not_found', () => {
-      expect(response.body.internalCode).toBe('game_was_not_found');
+    it('internalCode is game_was_not_found_error', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found_error');
     });
     it('message is Game was not found', () => {
       expect(response.body.message).toBe('Game was not found');
@@ -206,8 +206,8 @@ describe('GET /games/:gameId/cards_in_hand', () => {
     it('status is 404', () => {
       expect(response.status).toBe(404);
     });
-    it('internalCode is game_was_not_found', () => {
-      expect(response.body.internalCode).toBe('game_was_not_found');
+    it('internalCode is game_was_not_found_error', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found_error');
     });
     it('message is Game was not found', () => {
       expect(response.body.message).toBe('Game was not found');
@@ -277,8 +277,8 @@ describe('GET /games/:gameId/status', () => {
     it('status is 404', () => {
       expect(response.status).toBe(404);
     });
-    it('internalCode is game_was_not_found', () => {
-      expect(response.body.internalCode).toBe('game_was_not_found');
+    it('internalCode is game_was_not_found_error', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found_error');
     });
     it('message is Game was not found', () => {
       expect(response.body.message).toBe('Game was not found');
@@ -448,11 +448,34 @@ describe('PUT /turns', () => {
     it('status is 404', () => {
       expect(response.status).toBe(404);
     });
-    it('internalCode is game_was_not_found', () => {
-      expect(response.body.internalCode).toBe('game_was_not_found');
+    it('internalCode is game_was_not_found_error', () => {
+      expect(response.body.internalCode).toBe('game_was_not_found_error');
     });
     it('message is Game was not found', () => {
       expect(response.body.message).toBe('Game was not found');
+    });
+  });
+
+  describe('Game already finished respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      await redisClient.flushall();
+      await storeGame({ ...game, monster: { ...game.monster, hp: 0 } });
+      const cardPlayed = game.player.cardsInHand[0];
+      response = await request(app)
+        .put('/turns')
+        .send({ gameId: game.id, turn: { cardPlayed } });
+      return done();
+    });
+
+    it('status is 403', () => {
+      expect(response.status).toBe(403);
+    });
+    it('internalCode is game_is_already_finished_error', () => {
+      expect(response.body.internalCode).toBe('game_is_already_finished_error');
+    });
+    it('message is Game is already finished', () => {
+      expect(response.body.message).toBe('Game is already finished');
     });
   });
 

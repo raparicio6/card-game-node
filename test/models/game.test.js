@@ -222,5 +222,13 @@ describe('Game', () => {
       expect(monsterEffect).toBe(damageCard);
       expect(monster.cardsInHand.length).toBe(1);
     });
+    it('playNextPlayerAndMonsterTurns with game already finished returns gameIsAlreadyFinishedError', () => {
+      monster.hp = 0;
+      try {
+        game.playNextPlayerAndMonsterTurns();
+      } catch (error) {
+        expect(error).toStrictEqual(errors.gameIsAlreadyFinishedError());
+      }
+    });
   });
 });

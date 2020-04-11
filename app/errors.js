@@ -17,5 +17,9 @@ exports.cardWasNotPlayedError = () =>
 exports.DATABASE_ERROR = 'database_error';
 exports.databaseError = message => internalError(message, exports.DATABASE_ERROR);
 
-exports.GAME_WAS_NOT_FOUND = 'game_was_not_found';
-exports.gameWasNotFound = () => internalError('Game was not found', exports.GAME_WAS_NOT_FOUND);
+exports.GAME_WAS_NOT_FOUND_ERROR = 'game_was_not_found_error';
+exports.gameWasNotFoundError = () => internalError('Game was not found', exports.GAME_WAS_NOT_FOUND_ERROR);
+
+exports.GAME_IS_ALREADY_FINISHED_ERROR = 'game_is_already_finished_error';
+exports.gameIsAlreadyFinishedError = () =>
+  internalError('Game is already finished', exports.GAME_IS_ALREADY_FINISHED_ERROR);
