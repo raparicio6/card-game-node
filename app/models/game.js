@@ -19,21 +19,6 @@ module.exports = class Game {
     this.turns = [];
   }
 
-  static getNewId() {
-    return uuidv4();
-  }
-
-  prepareFirstTurn() {
-    addCardsToHand(this.player, this.monster, this.entityDrawsCard);
-    addCardsToHand(this.monster, this.player, this.entityDrawsCard);
-    this.addTurn(new Turn(this.player));
-    this.entityDrawsCard(this.player, this.monster);
-  }
-
-  addTurn(turn) {
-    this.turns.push(turn);
-  }
-
   get currentTurn() {
     return this.turns.length ? this.turns[this.turns.length - 1] : null;
   }
@@ -46,6 +31,21 @@ module.exports = class Game {
       return this.monster;
     }
     return null;
+  }
+
+  static getNewId() {
+    return uuidv4();
+  }
+
+  addTurn(turn) {
+    this.turns.push(turn);
+  }
+
+  prepareFirstTurn() {
+    addCardsToHand(this.player, this.monster, this.entityDrawsCard);
+    addCardsToHand(this.monster, this.player, this.entityDrawsCard);
+    this.addTurn(new Turn(this.player));
+    this.entityDrawsCard(this.player, this.monster);
   }
 
   entityDrawsCard(owner, opponent) {

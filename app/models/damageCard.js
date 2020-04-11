@@ -8,12 +8,12 @@ module.exports = class DamageCard extends Card {
     this.opponent = opponent;
   }
 
-  applyEffect(_) {
-    this.opponent.takeDamage(this.value);
-  }
-
   get type() {
     return DAMAGE_CARD_TYPE_NAME;
+  }
+
+  applyEffect(_) {
+    this.opponent.takeDamage(this.value);
   }
 
   toJSON() {

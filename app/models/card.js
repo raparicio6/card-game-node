@@ -10,13 +10,13 @@ module.exports = class Card {
   }
 
   // istanbul ignore next
-  // eslint-disable-next-line no-unused-vars
-  applyEffect(opponentNextTurn) {
+  get type() {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 
   // istanbul ignore next
-  get type() {
+  // eslint-disable-next-line no-unused-vars
+  applyEffect(opponentNextTurn) {
     throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 

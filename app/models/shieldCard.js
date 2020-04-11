@@ -7,12 +7,12 @@ module.exports = class ShieldCard extends Card {
     this.value = value;
   }
 
-  applyEffect(_) {
-    this.owner.shield += this.value;
-  }
-
   get type() {
     return SHIELD_CARD_TYPE_NAME;
+  }
+
+  applyEffect(_) {
+    this.owner.shield += this.value;
   }
 
   toJSON() {

@@ -13,6 +13,26 @@ module.exports = class Entity {
     this.cardsInHand = [];
   }
 
+  // istanbul ignore next
+  get maxHp() {
+    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
+  }
+
+  // istanbul ignore next
+  get cardsValuesWithProbabilities() {
+    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
+  }
+
+  // istanbul ignore next
+  get numberOfCardsInInitialHand() {
+    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
+  }
+
+  // istanbul ignore next
+  get cardsTypesProbabilities() {
+    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
+  }
+
   addCardToHand(card) {
     this.cardsInHand.push(card);
   }
@@ -22,6 +42,11 @@ module.exports = class Entity {
     if (cardFound) {
       this.cardsInHand.splice(this.cardsInHand.indexOf(cardFound), 1);
     }
+  }
+
+  hasCard(card) {
+    const cardFound = findCard(this.cardsInHand, card);
+    return !!cardFound;
   }
 
   gainHp(hp) {
@@ -48,30 +73,5 @@ module.exports = class Entity {
 
   wouldBeKilled(damage) {
     return damage >= this.hp + this.shield;
-  }
-
-  hasCard(card) {
-    const cardFound = findCard(this.cardsInHand, card);
-    return !!cardFound;
-  }
-
-  // istanbul ignore next
-  get maxHp() {
-    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
-  }
-
-  // istanbul ignore next
-  get cardsValuesWithProbabilities() {
-    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
-  }
-
-  // istanbul ignore next
-  get numberOfCardsInInitialHand() {
-    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
-  }
-
-  // istanbul ignore next
-  get cardsTypesProbabilities() {
-    throw new TypeError(SUBCLASS_MUST_IMPLEMENT_MESSAGE);
   }
 };

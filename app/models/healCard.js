@@ -7,12 +7,12 @@ module.exports = class HealCard extends Card {
     this.value = value;
   }
 
-  applyEffect(_) {
-    this.owner.gainHp(this.value);
-  }
-
   get type() {
     return HEAL_CARD_TYPE_NAME;
+  }
+
+  applyEffect(_) {
+    this.owner.gainHp(this.value);
   }
 
   toJSON() {
