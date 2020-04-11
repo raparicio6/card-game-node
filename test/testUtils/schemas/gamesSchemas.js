@@ -38,7 +38,7 @@ exports.game = {
       }
     ]
   },
-  monsterEffect: {},
+  monsterEffect: null,
   winner: null
 };
 
