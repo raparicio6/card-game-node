@@ -478,8 +478,8 @@ describe('PUT /games/:gameId', () => {
     it('internalCode is schema_error', () => {
       expect(response.body.internalCode).toBe('schema_error');
     });
-    it('message is Card type not allowed. Allowed card types are damage,heal,shield', () => {
-      expect(response.body.message).toBe('Card type not allowed. Allowed card types are damage,heal,shield');
+    it('message is Card type not allowed. Allowed cards types are damage,heal,shield', () => {
+      expect(response.body.message).toBe('Card type not allowed. Allowed cards types are damage,heal,shield');
     });
   });
 

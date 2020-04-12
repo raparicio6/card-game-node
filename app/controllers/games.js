@@ -54,7 +54,7 @@ exports.playNextPlayerAndMonsterTurns = (req, res, next) => {
   if (cardPlayed && !Player.getNamesOfAllowedCardsTypes().includes(cardPlayed.type)) {
     return next(
       errors.schemaError(
-        `Card type not allowed. Allowed card types are ${Player.getNamesOfAllowedCardsTypes()}`
+        `Card type not allowed. Allowed cards types are ${Player.getNamesOfAllowedCardsTypes()}`
       )
     );
   }
