@@ -463,6 +463,28 @@ describe('PUT /games/:gameId', () => {
     });
   });
 
+  describe('Card not allowed respond with error', () => {
+    let response = null;
+    beforeAll(async done => {
+      response = await request(app)
+        .put(`/games/${game.id}`)
+        .send({ turn: { cardPlayed: { type: 'wrong type!', value: 5 } } });
+      return done();
+    });
+
+    it('status is 422', () => {
+      expect(response.status).toBe(422);
+    });
+    it('internalCode is schema_error', () => {
+      expect(response.body.internalCode).toBe('schema_error');
+    });
+    it('message is Card type not allowed. Allowed card types are damage,heal,shield', () => {
+      expect(response.body.message).toBe(
+        'Card type not allowed. Allowed card types are damage,heal,shield'
+      );
+    });
+  });
+
   describe('Redis error respond with error', () => {
     let response = null;
     beforeAll(async done => {

@@ -6,6 +6,9 @@ const internalError = (message, internalCode) => ({
 exports.DEFAULT_ERROR = 'default_error';
 exports.defaultError = message => internalError(message, exports.DEFAULT_ERROR);
 
+exports.SCHEMA_ERROR = 'schema_error';
+exports.schemaError = message => internalError(message, exports.SCHEMA_ERROR);
+
 exports.CARD_PLAYED_IS_NOT_IN_HAND_ERROR = 'card_played_is_not_in_hand_error';
 exports.cardPlayedIsNotInHandError = () =>
   internalError('Card played is not in hand', exports.CARD_PLAYED_IS_NOT_IN_HAND_ERROR);

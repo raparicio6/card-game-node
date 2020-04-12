@@ -6,6 +6,9 @@ const { storeGame, getGame } = require('../services/redis');
 const { serializeGame, serializeEntityCardsInHand, serializeEntityStatus } = require('../serializers/games');
 const { mapGameToInstance } = require('../mappers/games');
 const errors = require('../errors');
+const { DAMAGE_CARD_TYPE_NAME, HEAL_CARD_TYPE_NAME, SHIELD_CARD_TYPE_NAME } = require('../models/constants');
+
+const NAMES_OF_ALLOWED_CARDS_TYPES = [DAMAGE_CARD_TYPE_NAME, HEAL_CARD_TYPE_NAME, SHIELD_CARD_TYPE_NAME];
 
 exports.createGame = (req, res, next) => {
   const player = new Player(req.body.game.playerName);
@@ -49,8 +52,15 @@ exports.getEntityStatus = (req, res, next) =>
     })
     .catch(error => next(errors.databaseError(error.message)));
 
-exports.playNextPlayerAndMonsterTurns = (req, res, next) =>
-  getGame(req.params.gameId)
+exports.playNextPlayerAndMonsterTurns = (req, res, next) => {
+  const cardPlayed = req.body.turn.cardPlayed ? req.body.turn.cardPlayed : null;
+  if (cardPlayed && !NAMES_OF_ALLOWED_CARDS_TYPES.includes(cardPlayed.type)) {
+    return next(
+      errors.schemaError(`Card type not allowed. Allowed card types are ${NAMES_OF_ALLOWED_CARDS_TYPES}`)
+    );
+  }
+
+  return getGame(req.params.gameId)
     .then(game => {
       if (!game) {
         return next(errors.gameWasNotFoundError());
@@ -58,7 +68,6 @@ exports.playNextPlayerAndMonsterTurns = (req, res, next) =>
       const gameInstance = mapGameToInstance(game);
       const { player, monster } = gameInstance;
 
-      const cardPlayed = req.body.turn.cardPlayed ? req.body.turn.cardPlayed : null;
       const playerCardPlayed = cardPlayed
         ? CardFactory.getCardByTypeName(cardPlayed.type, player, cardPlayed.value, monster)
         : null;
@@ -73,3 +82,4 @@ exports.playNextPlayerAndMonsterTurns = (req, res, next) =>
       return storeGame(serializedGame.game).then(() => res.send(serializedGame));
     })
     .catch(error => next(errors.databaseError(error.message)));
+};
