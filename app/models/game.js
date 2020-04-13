@@ -3,7 +3,7 @@ const CardFactory = require('./cardFactory');
 const Turn = require('./turn');
 const errors = require('../errors');
 
-const MAX_TURNS = 12;
+const MAX_NUMBER_OF_TURNS = 12;
 
 const addCardsToHand = (owner, opponent, entityDrawsCard) => {
   for (let i = 1; i <= owner.numberOfCardsInInitialHand; i++) {
@@ -27,7 +27,7 @@ module.exports = class Game {
     if (this.monster.wasKilled()) {
       return this.player;
     }
-    if (this.player.wasKilled() || this.turns.length >= MAX_TURNS) {
+    if (this.player.wasKilled() || this.turns.length >= MAX_NUMBER_OF_TURNS) {
       return this.monster;
     }
     return null;
@@ -35,6 +35,10 @@ module.exports = class Game {
 
   static getNewId() {
     return uuidv4();
+  }
+
+  static getMaxNumberOfTurns() {
+    return MAX_NUMBER_OF_TURNS;
   }
 
   addTurn(turn) {

@@ -17,10 +17,10 @@ describe('GET /health', () => {
   });
 });
 
-describe('GET /redis_health', () => {
+describe('GET /health/redis', () => {
   let response = null;
   beforeAll(async done => {
-    response = await request(app).get('/redis_health');
+    response = await request(app).get('/health/redis');
     return done();
   });
 

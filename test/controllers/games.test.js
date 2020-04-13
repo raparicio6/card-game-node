@@ -512,3 +512,18 @@ describe('PUT /games/:gameId', () => {
     });
   });
 });
+
+describe('GET /games/max_number_of_turns', () => {
+  let response = null;
+  beforeAll(async done => {
+    response = await request(app).get('/games/max_number_of_turns');
+    return done();
+  });
+
+  it('status is 200', () => {
+    expect(response.status).toBe(200);
+  });
+  it('maxNumberOfTurns is 12', () => {
+    expect(response.body).toHaveProperty('maxNumberOfTurns', 12);
+  });
+});

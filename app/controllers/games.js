@@ -82,3 +82,5 @@ exports.playNextPlayerAndMonsterTurns = (req, res, next) => {
     })
     .catch(error => next(errors.databaseError(error.message)));
 };
+
+exports.getMaxNumberOfTurns = (_, res) => res.send({ maxNumberOfTurns: Game.getMaxNumberOfTurns() });
