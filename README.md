@@ -2,10 +2,9 @@
 
 ## Next Steps
 * Document API
-* Mock random function in utils in order to test CardFactory manually each case
-* Limit requests from the same IP in order to prevent an atacker from creating too many games
+* Mock random generator function in utils in order to test CardFactory each case manually
+* Limit requests from the same IP in order to prevent an atacker from creating too many games and populate the database
 
-&nbsp;
 ## Getting Started
 
 ### Installing
@@ -18,7 +17,7 @@ Install dependencies by running `npm i`.
 Install [Redis](https://redis.io/download). Its very easy!
 
 Create a *.env* file at the root of the project and add:  
-`REDIS_NAME_TEST=0`
+`REDIS_NAME_TEST=0`  
 `REDIS_NAME_DEV=1`
 
 This project has its corresponding [GraphQL](https://github.com/raparicio6/card-game-graphql)  and [Frontend](https://github.com/raparicio6/card-game-react).
