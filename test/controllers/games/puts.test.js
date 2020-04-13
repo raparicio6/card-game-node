@@ -62,8 +62,19 @@ describe('PUT /games/:gameId', () => {
     it('game has winner property', () => {
       expect(response.body.game).toHaveProperty('winner');
     });
+    it('game has statusAfterTurnOfPlayer property', () => {
+      expect(response.body.game).toHaveProperty('winner');
+    });
     it('game only has mentioned properties', () => {
-      const properties = ['id', 'player', 'monster', 'turns', 'winner', 'monsterEffect'];
+      const properties = [
+        'id',
+        'player',
+        'monster',
+        'turns',
+        'winner',
+        'monsterEffect',
+        'statusAfterTurnOfPlayer'
+      ];
       expect(properties).toEqual(expect.arrayContaining(Object.keys(response.body.game)));
     });
   });

@@ -1,7 +1,8 @@
 const {
   serializeGame,
   serializeEntityCardsInHand,
-  serializeEntityStatus
+  serializeEntityStatus,
+  serializeStatusAfterTurnOfPlayer
 } = require('../../app/serializers/games');
 const { game, getGameInstance } = require('../testUtils/schemas/gamesSchemas');
 const Player = require('../../app/models/player');
@@ -48,5 +49,30 @@ describe('serializeEntityStatus', () => {
   it('monster serializedStatus matchs with monster status in game', () => {
     const serializedStatus = serializeEntityStatus(game, 'monster');
     expect(serializedStatus).toMatchObject({ hp: game.monster.hp, shield: game.monster.shield });
+  });
+});
+
+describe('serializeStatusAfterTurnOfPlayer', () => {
+  it('statusAfterTurnOfPlayer matchs with player and monster status in game and there is no winner', () => {
+    const gameInstance = getGameInstance();
+    const statusAfterTurnOfPlayer = serializeStatusAfterTurnOfPlayer(gameInstance);
+    const { player, monster, winner } = gameInstance;
+    expect(statusAfterTurnOfPlayer).toMatchObject({
+      player: { hp: player.hp, shield: player.shield },
+      monster: { hp: monster.hp, shield: monster.shield },
+      winner
+    });
+  });
+  it('statusAfterTurnOfPlayer matchs with player and monster status in game and there is a winner', () => {
+    const deadMonster = new Monster();
+    deadMonster.hp = 0;
+    const gameInstance = getGameInstance(deadMonster);
+    const statusAfterTurnOfPlayer = serializeStatusAfterTurnOfPlayer(gameInstance);
+    const { player, monster, winner } = gameInstance;
+    expect(statusAfterTurnOfPlayer).toMatchObject({
+      player: { hp: player.hp, shield: player.shield },
+      monster: { hp: monster.hp, shield: monster.shield },
+      winner: winner.constructor.name
+    });
   });
 });

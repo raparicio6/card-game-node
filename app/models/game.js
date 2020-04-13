@@ -57,6 +57,10 @@ module.exports = class Game {
   }
 
   playPlayerTurn(cardPlayed) {
+    if (this.winner) {
+      throw errors.gameIsAlreadyFinishedError();
+    }
+
     const monsterNextTurn = new Turn(this.monster);
     if (!this.currentTurn.cardCanBePlayed) {
       this.addTurn(monsterNextTurn);
@@ -79,6 +83,10 @@ module.exports = class Game {
   }
 
   playMonsterTurn() {
+    if (this.winner) {
+      return null;
+    }
+
     this.entityDrawsCard(this.monster, this.player);
 
     const playerNextTurn = new Turn(this.player);
@@ -92,25 +100,7 @@ module.exports = class Game {
     cardPlayed.applyEffect(playerNextTurn);
 
     this.addTurn(playerNextTurn);
-    return cardPlayed;
-  }
-
-  playNextPlayerAndMonsterTurns(playerCardPlayed) {
-    if (this.winner) {
-      throw errors.gameIsAlreadyFinishedError();
-    }
-
-    this.playPlayerTurn(playerCardPlayed);
-    if (this.winner) {
-      return null;
-    }
-
-    const monsterCardPlayed = this.playMonsterTurn();
-    if (this.winner) {
-      return monsterCardPlayed;
-    }
-
     this.entityDrawsCard(this.player, this.monster);
-    return monsterCardPlayed;
+    return cardPlayed;
   }
 };

@@ -3,7 +3,12 @@ const Monster = require('../models/monster');
 const Game = require('../models/game');
 const CardFactory = require('../models/cardFactory');
 const { storeGame, getGame } = require('../services/redis');
-const { serializeGame, serializeEntityCardsInHand, serializeEntityStatus } = require('../serializers/games');
+const {
+  serializeGame,
+  serializeEntityCardsInHand,
+  serializeEntityStatus,
+  serializeStatusAfterTurnOfPlayer
+} = require('../serializers/games');
 const { mapGameToInstance } = require('../mappers/games');
 const errors = require('../errors');
 
@@ -71,13 +76,15 @@ exports.playNextPlayerAndMonsterTurns = (req, res, next) => {
         ? CardFactory.getCardByTypeName(cardPlayed.type, player, cardPlayed.value, monster)
         : null;
 
-      let monsterCardPlayed = null;
       try {
-        monsterCardPlayed = gameInstance.playNextPlayerAndMonsterTurns(playerCardPlayed);
+        gameInstance.playPlayerTurn(playerCardPlayed);
       } catch (error) {
         return next(error);
       }
-      const serializedGame = serializeGame(gameInstance, monsterCardPlayed);
+
+      const statusAfterTurnOfPlayer = serializeStatusAfterTurnOfPlayer(gameInstance);
+      const monsterCardPlayed = gameInstance.playMonsterTurn(playerCardPlayed);
+      const serializedGame = serializeGame(gameInstance, monsterCardPlayed, statusAfterTurnOfPlayer);
       return storeGame(serializedGame.game).then(() => res.send(serializedGame));
     })
     .catch(error => next(errors.databaseError(error.message)));
