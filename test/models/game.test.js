@@ -36,7 +36,7 @@ describe('Game', () => {
     expect(game.turns.length).toBe(1);
   });
   it('currentTurn returns null if there are no turns', () => {
-    expect(game.turns.length).toBe(0);
+    game.turns = [];
     expect(game.currentTurn).toBe(null);
   });
   it('currentTurn returns last added turn', () => {
