@@ -39,6 +39,7 @@ exports.game = {
     ]
   },
   monsterEffect: null,
+  statusAfterTurnOfPlayer: null,
   winner: null
 };
 
