@@ -1,5 +1,8 @@
 # Card Game
 
+[![Build Status](https://circleci.com/gh/raparicio6/card-game-node.svg?style=shield)](https://circleci.com/gh/raparicio6/card-game-node-node)
+[![Coverage Status](https://coveralls.io/repos/github/raparicio6/card-game-node/badge.svg?branch=master)](https://coveralls.io/github/raparicio6/card-game-node?branch=master)
+
 ## Next Steps
 * Document API
 * Mock random generator function in utils in order to test CardFactory each case manually
