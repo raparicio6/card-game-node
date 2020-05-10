@@ -12,6 +12,11 @@ const {
 const { mapGameToInstance } = require('../mappers/games');
 const errors = require('../errors');
 
+const getGameAndRespond = (gameId, res, next, serializeFunction, params = []) =>
+  getGame(gameId)
+    .then(game => (game ? res.send(serializeFunction(game, ...params)) : next(errors.gameWasNotFoundError())))
+    .catch(error => next(errors.databaseError(error.message)));
+
 exports.createGame = (req, res, next) => {
   const player = new Player(req.body.game.playerName);
   const monster = new Monster();
@@ -24,35 +29,13 @@ exports.createGame = (req, res, next) => {
     .catch(error => next(errors.databaseError(error.message)));
 };
 
-exports.getGame = (req, res, next) =>
-  getGame(req.params.gameId)
-    .then(game => {
-      if (!game) {
-        return next(errors.gameWasNotFoundError());
-      }
-      return res.send({ game });
-    })
-    .catch(error => next(errors.databaseError(error.message)));
+exports.getGame = (req, res, next) => getGameAndRespond(req.params.gameId, res, next, game => ({ game }));
 
 exports.getEntityCards = (req, res, next) =>
-  getGame(req.params.gameId)
-    .then(game => {
-      if (!game) {
-        return next(errors.gameWasNotFoundError());
-      }
-      return res.send(serializeEntityCardsInHand(game, req.query.entity));
-    })
-    .catch(error => next(errors.databaseError(error.message)));
+  getGameAndRespond(req.params.gameId, res, next, serializeEntityCardsInHand, [req.query.entity]);
 
 exports.getEntityStatus = (req, res, next) =>
-  getGame(req.params.gameId)
-    .then(game => {
-      if (!game) {
-        return next(errors.gameWasNotFoundError());
-      }
-      return res.send(serializeEntityStatus(game, req.query.entity));
-    })
-    .catch(error => next(errors.databaseError(error.message)));
+  getGameAndRespond(req.params.gameId, res, next, serializeEntityStatus, [req.query.entity]);
 
 exports.playNextPlayerAndMonsterTurns = (req, res, next) => {
   const cardPlayed = req.body.turn.cardPlayed ? req.body.turn.cardPlayed : null;
