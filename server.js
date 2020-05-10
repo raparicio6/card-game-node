@@ -9,4 +9,7 @@ Promise.resolve()
     app.listen(port);
     logger.info(`Listening on port: ${port}`);
   })
-  .catch(logger.error);
+  .catch(error => {
+    logger.error(error);
+    process.exit(1);
+  });

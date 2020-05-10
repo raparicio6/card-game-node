@@ -4,12 +4,12 @@ const Turn = require('../../app/models/turn');
 const ShieldCard = require('../../app/models/shieldCard');
 
 describe('mapGameToInstance', () => {
-  it('mapGameToInstance matchs with game instance', () => {
+  it('mapGameToInstance matches with game instance', () => {
     const gameInstance = mapGameToInstance(game);
     expect(gameInstance).toEqual(getGameInstance());
   });
 
-  it('mapGameToInstance matchs with game instance with monster turn', () => {
+  it('mapGameToInstance matches with game instance with monster turn', () => {
     const gameWithMonsterTurn = {
       ...game,
       turns: [
