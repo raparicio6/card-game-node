@@ -1,5 +1,7 @@
 # Card Game
 
+<img alt="App" src="./app-image.png">
+
 ## Next Steps
 * Document API
 * Mock random generator function in utils in order to test CardFactory each case manually
@@ -20,7 +22,7 @@ Create a *.env* file at the root of the project and add:
 `REDIS_NAME_TEST=0`  
 `REDIS_NAME_DEV=1`
 
-This project has its corresponding [GraphQL](https://github.com/raparicio6/card-game-graphql)  and [Frontend](https://github.com/raparicio6/card-game-react).
+**This project has its corresponding [GraphQL](https://github.com/raparicio6/card-game-graphql) and [Frontend](https://github.com/raparicio6/card-game-react).**
 
 ### Starting app
 
