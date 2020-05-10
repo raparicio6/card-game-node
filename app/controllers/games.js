@@ -12,9 +12,9 @@ const {
 const { mapGameToInstance } = require('../mappers/games');
 const errors = require('../errors');
 
-const getGameAndRespond = (gameId, res, next, serializeFunction, params = []) =>
+const getGameAndRespond = (gameId, res, next, serializerFunction) =>
   getGame(gameId)
-    .then(game => (game ? res.send(serializeFunction(game, ...params)) : next(errors.gameWasNotFoundError())))
+    .then(game => (game ? res.send(serializerFunction(game)) : next(errors.gameWasNotFoundError())))
     .catch(error => next(errors.databaseError(error.message)));
 
 exports.createGame = (req, res, next) => {
@@ -32,10 +32,10 @@ exports.createGame = (req, res, next) => {
 exports.getGame = (req, res, next) => getGameAndRespond(req.params.gameId, res, next, game => ({ game }));
 
 exports.getEntityCards = (req, res, next) =>
-  getGameAndRespond(req.params.gameId, res, next, serializeEntityCardsInHand, [req.query.entity]);
+  getGameAndRespond(req.params.gameId, res, next, game => serializeEntityCardsInHand(game, req.query.entity));
 
 exports.getEntityStatus = (req, res, next) =>
-  getGameAndRespond(req.params.gameId, res, next, serializeEntityStatus, [req.query.entity]);
+  getGameAndRespond(req.params.gameId, res, next, game => serializeEntityStatus(game, req.query.entity));
 
 exports.playNextPlayerAndMonsterTurns = (req, res, next) => {
   const cardPlayed = req.body.turn.cardPlayed ? req.body.turn.cardPlayed : null;

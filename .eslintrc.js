@@ -3,8 +3,7 @@ module.exports = {
   rules: {
     'id-length': ['error', { max: 35 , min: 1 }],
     'class-methods-use-this': 'off',
-    'no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
-    'max-params': ['error', { max: 5 }]
+    'no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }]
   }
 };
   
