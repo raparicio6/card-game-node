@@ -1,5 +1,8 @@
 # Card Game
 
+[![Build Status](https://circleci.com/gh/raparicio6/card-game-node.svg?style=shield)](https://circleci.com/gh/raparicio6/card-game-node)
+[![Coverage Status](https://coveralls.io/repos/github/raparicio6/card-game-node/badge.svg?branch=master)](https://coveralls.io/github/raparicio6/card-game-node?branch=master)
+
 <img alt="App" src="./app-image.png">
 
 ## Next Steps
