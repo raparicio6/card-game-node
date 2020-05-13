@@ -15,8 +15,8 @@ describe('Monster', () => {
   it('monster hp is 20', () => {
     expect(monster.hp).toBe(20);
   });
-  it('monster shield is 10', () => {
-    expect(monster.shield).toBe(10);
+  it('monster shield is 5', () => {
+    expect(monster.shield).toBe(5);
   });
   it('monster has 0 cards in hand', () => {
     expect(monster.cardsInHand.length).toBe(0);
@@ -36,12 +36,12 @@ describe('Monster', () => {
   it('monster numberOfCardsInInitialHand is 4', () => {
     expect(monster.numberOfCardsInInitialHand).toBe(4);
   });
-  it('monster cardsTypesProbabilities is [[1, 0.35], [2, 0.25], [3, 0.3], [4, 0.1]]', () => {
+  it('monster cardsTypesProbabilities is [[1, 0.15], [2, 0.15], [3, 0.5], [4, 0.2]]', () => {
     expect(monster.cardsTypesProbabilities).toStrictEqual([
-      [1, 0.35],
-      [2, 0.25],
-      [3, 0.3],
-      [4, 0.1]
+      [1, 0.15],
+      [2, 0.15],
+      [3, 0.5],
+      [4, 0.2]
     ]);
   });
 

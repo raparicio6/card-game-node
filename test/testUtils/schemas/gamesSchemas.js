@@ -27,7 +27,7 @@ exports.game = {
   },
   monster: {
     hp: 20,
-    shield: 10,
+    shield: 5,
     cardsInHand: [
       {
         type: 'damage',

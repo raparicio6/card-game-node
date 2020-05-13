@@ -56,7 +56,7 @@ describe('Game', () => {
       expect(game.winner).toBe(monster);
     });
     it('there are 12 turns so monster wins', () => {
-      for (let i = 1; i <= 12; i++) {
+      for (let i = 1; i <= 16; i++) {
         game.addTurn(new Turn());
       }
       expect(game.winner).toBe(monster);

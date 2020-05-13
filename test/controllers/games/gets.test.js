@@ -226,7 +226,7 @@ describe('GET /games/max_number_of_turns', () => {
   it('status is 200', () => {
     expect(response.status).toBe(200);
   });
-  it('maxNumberOfTurns is 12', () => {
-    expect(response.body).toHaveProperty('maxNumberOfTurns', 12);
+  it('maxNumberOfTurns is 16', () => {
+    expect(response.body).toHaveProperty('maxNumberOfTurns', 16);
   });
 });
